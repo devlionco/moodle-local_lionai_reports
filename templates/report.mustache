@@ -1,0 +1,103 @@
+<div id="smartreport-report">
+    <h5><a href="{{allreportsurl}}">All reports</a></h5>
+
+    <div class="card">
+        <div class="card-body">
+            <h3 class="card-subtitle mb-2 text-muted">{{name}}<span class="badge badge-light">{{id}}</span></h3>
+            <p class="card-text">
+                Created: {{timecreated}}<br>
+                Modified: {{timemodified}}
+            </p>
+            <p class="card-text">
+                Options: {{options}}<br>
+            </p>
+        </div>
+    </div>
+
+    <div class="row mb-5">
+        <div class="col-md-2"></div>
+
+        <div class="col-md-8">
+
+            <div class="row container mt-3">
+                <textarea id="id_userprompt" class="form-control" rows="5"></textarea>
+            </div>
+
+            <div class="row container mt-3">
+
+                <button class="btn btn-primary ml-0" name="senduserprompt" id="id_senduserprompt" type="button"
+                    data-toggle="tooltip" data-placement="left" title="You could use CTRL+Enter">
+                    Send prompt
+                </button>
+
+                <div>
+                    <button type="button" class="btn btn-secondary smartreport-history ml-1" data-toggle="modal"
+                        data-target="#historyModal" id="smartreporthistory" href="#" role="button">
+                        Pick from recent history
+                    </button>
+                </div>
+                <div class="modal fade" id="historyModal" tabindex="-1" aria-labelledby="historyModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="historyModalLabel">Pick from recent history</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="smartreport-history-list list-group list-group-flush">
+                                    {{#history}}
+                                    <li class="list-group-item list-group-item-action text-info smartreport-history-list-item {{classes}}"
+                                        href="#" role="button" data-role="{{role}}">
+                                        {{{content}}}</li>
+                                    {{/history}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dropdown ml-auto">
+                    <a class="btn btn-outline-info dropdown-toggle smartreport-examples ml-1" href="#" role="button"
+                        data-toggle="dropdown" aria-expanded="false">
+                        Examples
+                    </a>
+                    <div class="dropdown-menu smartreport-examples-list">
+                        <a class="dropdown-item" href="#">
+                            List all forum posts
+                        </a>
+                        <a class="dropdown-item" href="#">
+                            Show all users first and last names with last login date in dd.mm.yy
+                        </a>
+                        <a class="dropdown-item" href="#">
+                            Give me users whose first names contain the letter A and emails contain the digit 2
+                        </a>
+                        <a class="dropdown-item" href="#">gt ll srs</a>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row container mt-3">
+                <textarea id="id_querysql" class="form-control" rows="5"></textarea>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="row mb-5">
+        <div id="id_queryresultmessage" class="">
+        </div>
+        <div id="" class="">
+            <a role="button" href="#" class="d-none btn btn-success mb-3 ml-3" id ="id_trytofix">Try to fix</a>
+        </div>
+    </div>
+
+    <div class="row mb-5">
+        <div id="id_queryresultwrapper" class="container mt-3">
+        </div>
+    </div>
+</div>

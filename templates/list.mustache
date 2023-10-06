@@ -1,0 +1,37 @@
+<div id="smartreport-list">
+    <h2>{{#str}}list, local_smartreport{{/str}}</h2>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>{{#str}}Name{{/str}}</th>
+                <th>{{#str}}ID{{/str}}</th>
+                <th>{{#str}}Time Created{{/str}}</th>
+                <th>{{#str}}Time Modified{{/str}}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#list}}
+            <tr style="cursor: pointer;" onclick="window.location.href='{{link}}';">
+                <td>
+                    {{#name}}
+                    <a href="{{link}}">{{name}}</a>
+                    {{/name}}
+                    {{^name}}
+                    <a href="{{link}}">
+                        {{#userdate}}{{timecreated}}, {{#str}}strftimedatetime, langconfig{{/str}}{{/userdate}}
+                    </a>
+                    {{/name}}
+                </td>
+                <td>{{id}}</td>
+                <td>
+                    {{#userdate}}{{timecreated}}, {{#str}}strftimedatetime, langconfig{{/str}}{{/userdate}}
+                </td>
+                <td>
+                    {{#userdate}}{{timemodified}}, {{#str}}strftimedatetime, langconfig{{/str}}{{/userdate}}
+                </td>
+            </tr>
+            {{/list}}
+        </tbody>
+    </table>
+</div>
