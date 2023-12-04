@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="local/smartreport/db" VERSION="20230901" COMMENT="XMLDB file for Moodle local/smartreport"
+<XMLDB PATH="local/lionai_reports/db" VERSION="20230901" COMMENT="XMLDB file for Moodle local/lionai_reports"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
 >
   <TABLES>
-    <TABLE NAME="local_smartreport" COMMENT="Main table for local_smartreport">
+    <TABLE NAME="local_lionai_reports" COMMENT="Main table for local_lionai_reports">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
         <FIELD NAME="name" TYPE="text" NOTNULL="false" SEQUENCE="false"/>

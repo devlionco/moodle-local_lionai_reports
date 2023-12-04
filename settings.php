@@ -17,19 +17,57 @@
 /**
  * Plugin administration pages are defined here.
  *
- * @package     local_smartreport
+ * @package     local_lionai_reports
  * @category    admin
  * @copyright   2023 Devlion <info@devlion.co>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use core_admin\local\externalpage\accesscallback;
+use core_reportbuilder\permission;
+
 defined('MOODLE_INTERNAL') || die();
 
 if ($hassiteconfig) {
-    $settings = new admin_settingpage('local_smartreport_settings', new lang_string('pluginname', 'local_smartreport'));
+    $ADMIN->add('localplugins',
+            new admin_category('local_lionai_reports_settings', new lang_string('pluginname', 'local_lionai_reports')));
+    $settingspage = new admin_settingpage('managelocal_lionai_reports', new lang_string('pluginname', 'local_lionai_reports'));
 
-    // phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedIf
     if ($ADMIN->fulltree) {
-        // TODO: Define actual plugin settings page and add it to the tree - {@link https://docs.moodle.org/dev/Admin_settings}.
+        $settingspage->add(new admin_setting_configpasswordunmask('local_lionai_reports/lionai_reports_apikey',
+                get_string('lionai_reports_apikey', 'local_lionai_reports'),
+            get_string('lionai_reports_apikeyinfo', 'local_lionai_reports'), '9vDfmIZIDC9JIv1XUCRKwM0pYXKIp76x', PARAM_RAW, 128));
+
+        $settingspage->add(new admin_setting_configtext('local_lionai_reports/lionai_reports_apiurl',
+                get_string('lionai_reports_apiurl', 'local_lionai_reports'), '',
+                'https://apireprot.learnapp.io/api.php', PARAM_URL, 35));
+
+        $settingspage->add(new admin_setting_configtext('local_lionai_reports/lionai_reports_limitrecords',
+                get_string('lionai_reports_limitrecords', 'local_lionai_reports'),
+            get_string('lionai_reports_limitrecordsinfo', 'local_lionai_reports'), '10', PARAM_INT, 3));
+
     }
+
+    $ADMIN->add('localplugins', $settingspage);
+
+    $ADMIN->add(
+        'reports', new admin_category(
+            'lionai_reports',
+            new lang_string('allreports', 'local_lionai_reports')
+        )
+    );
+
+    $ADMIN->add(
+        'lionai_reports', new accesscallback(
+            'allreports',
+            get_string('allreports', 'local_lionai_reports'),
+            (new moodle_url('/local/lionai_reports'))->out(),
+            static function (accesscallback $accesscallback): bool {
+                return true;
+            }
+        )
+    );
+
 }
+
+

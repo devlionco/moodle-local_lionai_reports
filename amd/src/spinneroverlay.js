@@ -24,19 +24,27 @@
 /**
  * spinneroverlay module for controlling spinneroverlay with spinner.
  *
- * @module     local_smartreport/spinneroverlay
- * @package    local_smartreport
+ * @module     local_lionai_reports/spinneroverlay
+ * @package    local_lionai_reports
  * @copyright  2023 Devlion.co <info@devlion.co>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+/**
+ * Provides functions for managing a spinner overlay.
+ * @namespace
+ */
 const spinneroverlay = {
+  /**
+   * Initializes the spinner overlay and adds it to the DOM.
+   *
+   * @param {string[]} controlledElements - An array of element IDs to be controlled by the overlay.
+   */
   initspinneroverlay: (controlledElements) => {
-    // Create the spinneroverlay div with a spinner and add it to the body.
     const spinneroverlay = document.createElement("div");
     spinneroverlay.innerHTML =
       '<img src="' +
-      M.util.image_url("spinner", "local_smartreport") +
+      M.util.image_url("spinner", "local_lionai_reports") +
       '" alt="Loading..." class="spinner">';
     spinneroverlay.style.position = "fixed";
     spinneroverlay.style.top = "0";
@@ -52,11 +60,15 @@ const spinneroverlay = {
     document.body.appendChild(spinneroverlay);
   },
 
+  /**
+   * Hides the spinner overlay and re-enables controlled elements.
+   *
+   * @param {string[]} controlledElements - An array of element IDs to be re-enabled.
+   */
   hidespinneroverlay: (controlledElements) => {
     const spinneroverlay = document.getElementById("spinneroverlay");
     spinneroverlay.style.display = "none";
 
-    // Enable controlled elements when the spinneroverlay is hidden.
     if (controlledElements && Array.isArray(controlledElements)) {
       controlledElements.forEach((elementId) => {
         const element = document.getElementById(elementId);
@@ -67,11 +79,15 @@ const spinneroverlay = {
     }
   },
 
+  /**
+   * Shows the spinner overlay and disables controlled elements.
+   *
+   * @param {string[]} controlledElements - An array of element IDs to be disabled.
+   */
   showspinneroverlay: (controlledElements) => {
     const spinneroverlay = document.getElementById("spinneroverlay");
     spinneroverlay.style.display = "flex";
 
-    // Disable controlled elements when the spinneroverlay is shown.
     if (controlledElements && Array.isArray(controlledElements)) {
       controlledElements.forEach((elementId) => {
         const element = document.getElementById(elementId);

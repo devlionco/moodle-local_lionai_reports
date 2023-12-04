@@ -17,7 +17,7 @@
 /**
  * External tool external functions and service definitions.
  *
- * @package    local_smartreport
+ * @package    local_lionai_reports
  * @category   external
  * @copyright  2023 Devlion <info@devlion.co>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -26,45 +26,48 @@
 
 defined('MOODLE_INTERNAL') || die;
 
-$functions = array(
+$functions = [
 
-    'local_smartreport_getlist' => array(
-        'classname' => 'local_smartreport_external',
+    'local_lionai_reports_getlist' => [
+        'classname' => 'local_lionai_reports_external',
         'methodname' => 'getlist',
         'description' => 'Get a list of reports',
         'type' => 'read',
-        // 'capabilities'  => 'moodle/site:config',
         'ajax' => true,
-    ),
-    'local_smartreport_getreport' => array(
-        'classname' => 'local_smartreport_external',
+    ],
+    'local_lionai_reports_getreport' => [
+        'classname' => 'local_lionai_reports_external',
         'methodname' => 'getreport',
         'description' => 'Get report',
         'type' => 'read',
-        // 'capabilities'  => 'moodle/site:config',
         'ajax' => true,
-    ),
-    'local_smartreport_updatereport' => array(
-        'classname' => 'local_smartreport_external',
+    ],
+    'local_lionai_reports_updatereport' => [
+        'classname' => 'local_lionai_reports_external',
         'methodname' => 'updatereport',
         'description' => 'update report',
         'type' => 'write',
-        // 'capabilities'  => 'moodle/site:config',
         'ajax' => true,
-    ),
-    'local_smartreport_send_prompt' => array(
-        'classname' => 'local_smartreport_external',
+    ],
+    'local_lionai_reports_send_prompt' => [
+        'classname' => 'local_lionai_reports_external',
         'methodname' => 'send_prompt',
         'description' => 'send_prompt.',
         'type' => 'write',
         'ajax' => true,
-    ),
-    'local_smartreport_getresult' => array(
-        'classname' => 'local_smartreport_external',
+    ],
+    'local_lionai_reports_rate_prompt' => [
+        'classname' => 'local_lionai_reports_external',
+        'methodname' => 'rate_prompt',
+        'description' => 'rate_prompt.',
+        'type' => 'read',
+        'ajax' => true,
+    ],
+    'local_lionai_reports_getresult' => [
+        'classname' => 'local_lionai_reports_external',
         'methodname' => 'getresult',
         'description' => 'Get result',
         'type' => 'read',
-        // 'capabilities'  => 'moodle/site:config',
         'ajax' => true,
-    ),
-);
+    ],
+];

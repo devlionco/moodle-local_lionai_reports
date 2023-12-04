@@ -1,37 +1,101 @@
-<div id="smartreport-list">
-    <h2>{{#str}}list, local_smartreport{{/str}}</h2>
+<div id="lionai_reports-list">
+    <form action="{{globals.config.wwwroot}}/local/lionai_reports/index.php" method="post">
+        <input type="hidden" name="action" value="create">
+        <input type="hidden" name="sesskey" value="{{sesskey}}">
+        <button class="btn btn-primary mb-3" type="submit">Add New Report</button>
+    </form>
 
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>{{#str}}Name{{/str}}</th>
-                <th>{{#str}}ID{{/str}}</th>
-                <th>{{#str}}Time Created{{/str}}</th>
-                <th>{{#str}}Time Modified{{/str}}</th>
-            </tr>
-        </thead>
-        <tbody>
-            {{#list}}
-            <tr style="cursor: pointer;" onclick="window.location.href='{{link}}';">
-                <td>
-                    {{#name}}
-                    <a href="{{link}}">{{name}}</a>
-                    {{/name}}
-                    {{^name}}
-                    <a href="{{link}}">
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <colgroup>
+                <col style="width: 5%;">
+                <col style="width: 30%;">
+                <col style="width: 50%;">
+                <col style="width: 10%;">
+                <col style="width: 5%;">
+                <col style="width: 5%;">
+            </colgroup>
+            <thead>
+                <tr>
+                    <th class="text-muted">{{#str}}id, local_lionai_reports{{/str}}</th>
+                    <th class="text-muted">{{#str}}name, local_lionai_reports{{/str}}</th>
+                    <th class="text-muted">{{#str}}lastmessages, local_lionai_reports{{/str}}</th>
+                    <th class="text-muted">{{#str}}actions, local_lionai_reports{{/str}}</th>
+                    <th class="text-muted">{{#str}}timecreated, local_lionai_reports{{/str}}</th>
+                    <th class="text-muted">{{#str}}timemodified, local_lionai_reports{{/str}}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#list}}
+                <tr>
+                    <td class="text-muted" style="cursor: pointer;" onclick="window.location.href='{{link}}';">{{id}}</td>
+                    <td style="cursor: pointer;" onclick="window.location.href='{{link}}';">
+                        {{#name}}
+                        <a href="{{link}}">{{name}}</a>
+                        {{/name}}
+                        {{^name}}
+                        <a href="{{link}}">
+                            {{#userdate}}{{timecreated}}, {{#str}}strftimedatetime, langconfig{{/str}}{{/userdate}}
+                        </a>
+                        {{/name}}
+                    </td>
+                    <td style="cursor: pointer;" onclick="window.location.href='{{link}}';">
+                        {{#lastmessages}}
+                        <div class="card">
+                            <div class="card-body small">
+                                {{#lastusercontent}}
+                                <p class="card-text">{{lastusercontent}}</p>
+                                {{/lastusercontent}}
+                                {{#lastassistantcontent}}
+                                <p class="card-text"><code>
+                                    {{lastassistantcontent}}
+                                </code>
+                                </p>
+                                {{/lastassistantcontent}}
+                            </div>
+                        </div>
+                        {{/lastmessages}}
+                    </td>
+                    <td>
+                        {{#actions}}
+                            <form action="{{{deleteactionurl}}}" method="post" style="display: inline;">
+                                <input type="hidden" name="action" value="delete">
+                                <input type="hidden" name="sesskey" value="{{sesskey}}">
+                                <button type="submit" class="m-1 btn btn-danger btn-sm" data-toggle="tooltip" data-html="true" data-placement="left"
+                                        title="{{#str}} deletewarning, local_lionai_reports{{/str}}"> {{#str}} delete, local_lionai_reports{{/str}}</button>
+                            </form>
+                            <form action="{{{exportcrautoactionurl}}}" target="_blank" method="post" style="display: inline;">
+                                <input type="hidden" name="autoimport" value="1">
+                                <input type="hidden" name="sesskey" value="{{sesskey}}">
+                                <button type="submit" class="m-1 btn btn-secondary btn-sm" data-toggle="tooltip" data-html="true" data-placement="left"
+                                        title="{{#str}} exportcrautowarning, local_lionai_reports{{/str}}"> {{#str}} exportcrauto, local_lionai_reports{{/str}}</button>
+                            </form>
+                            <form action="{{{exportcrxmlactionurl}}}" method="post" style="display: inline;">
+                                <input type="hidden" name="autoimport" value="0">
+                                <input type="hidden" name="sesskey" value="{{sesskey}}">
+                                <button type="submit" class="m-1 btn btn-secondary btn-sm" data-toggle="tooltip" data-html="true" data-placement="left"
+                                        title="{{#str}} exportcrxmlwarning, local_lionai_reports{{/str}}"> {{#str}} exportcrxml, local_lionai_reports{{/str}}</button>
+                            </form>
+                            <form action="{{{exportsqlactionurl}}}" method="post" style="display: inline;">
+                                <input type="hidden" name="autoimport" value="0">
+                                <input type="hidden" name="sesskey" value="{{sesskey}}">
+                                <button type="submit" class="m-1 btn btn-secondary btn-sm" data-toggle="tooltip" data-html="true" data-placement="left"
+                                        title="{{#str}} exportsqlwarning, local_lionai_reports{{/str}}"> {{#str}} exportsql, local_lionai_reports{{/str}}</button>
+                            </form>
+                            <br>
+                            <button onclick=" window.open('{{{exportcsvactionurl}}}','_blank')" type="submit" class="m-1 btn btn-secondary btn-sm" data-toggle="tooltip" data-html="true" data-placement="left"
+                                    title="{{#str}} exportcsvwarning, local_lionai_reports{{/str}}"> {{#str}} exportcsv, local_lionai_reports{{/str}}</button>
+                        {{/actions}}
+                    </td>
+                    <td class="text-muted small">
                         {{#userdate}}{{timecreated}}, {{#str}}strftimedatetime, langconfig{{/str}}{{/userdate}}
-                    </a>
-                    {{/name}}
-                </td>
-                <td>{{id}}</td>
-                <td>
-                    {{#userdate}}{{timecreated}}, {{#str}}strftimedatetime, langconfig{{/str}}{{/userdate}}
-                </td>
-                <td>
-                    {{#userdate}}{{timemodified}}, {{#str}}strftimedatetime, langconfig{{/str}}{{/userdate}}
-                </td>
-            </tr>
-            {{/list}}
-        </tbody>
-    </table>
+                    </td>
+                    <td class="text-muted small">
+                        {{#userdate}}{{timemodified}}, {{#str}}strftimedatetime, langconfig{{/str}}{{/userdate}}
+                    </td>
+                </tr>
+                {{/list}}
+            </tbody>
+        </table>
+    </div>
 </div>

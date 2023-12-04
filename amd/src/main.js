@@ -19,41 +19,66 @@
 /**
  * Javascript to initialise the main function.
  *
- * @module     local_smartreport/main
- * @package    local_smartreport
+ * @module     local_lionai_reports/main
+ * @package    local_lionai_reports
  * @copyright  2023 Devlion.co <info@devlion.co>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
+/**
+ * Module for managing the LionAI_Report UI, including rendering lists and reports.
+ *
+ * @module LionAI_ReportUI
+ */
 import Ajax from "core/ajax";
 import Templates from "core/templates";
-import * as SmartReport from "./report";
+import * as LionAiReport from "./report";
 import spinneroverlay from "./spinneroverlay";
 
+/**
+ * The CSS selectors used in the module.
+ * @typedef {Object} Selectors
+ * @property {string} MAINELEMENT - The main element selector.
+ * @property {string} LIST - The list selector.
+ * @property {string} REPORT - The report selector.
+ */
+
+/**
+ * The main element selector and other CSS selectors.
+ * @type {Selectors}
+ */
 var SELECTORS = {
-  MAINELEMENT: "smartreport-area",
-  LIST: "smartreport-list",
-  REPORT: "smartreport-report",
+  MAINELEMENT: "lionai_reports-area",
+  LIST: "lionai_reports-list",
+  REPORT: "lionai_reports-report",
 };
 
+/**
+ * Retrieves a list of LionAI_Reports via an AJAX call.
+ *
+ * @returns {Promise} A promise that resolves with the list data.
+ */
 const getList = () =>
   Ajax.call([
     {
-      methodname: "local_smartreport_getlist",
+      methodname: "local_lionai_reports_getlist",
       args: {},
     },
   ])[0];
 
+/**
+ * Renders the list of LionAI_Reports.
+ *
+ * @param {string} listData - The list data to render.
+ */
 const renderList = (listData) => {
   listData = JSON.parse(listData);
-  Templates.render("local_smartreport/list", listData)
-    .then(function (html, js) {
+  Templates.render("local_lionai_reports/list", listData)
+    .then(function(html, js) {
       Templates.appendNodeContents(
         document.getElementById(SELECTORS.MAINELEMENT),
         html,
         js
       );
-
       spinneroverlay.hidespinneroverlay();
 
       return;
@@ -61,20 +86,23 @@ const renderList = (listData) => {
     .catch();
 };
 
-export const init = async (id) => {
-  console.log("id", id);
+/**
+ * Initializes the LionAI_Report UI.
+ *
+ * @param {number} id - The ID of the report to initialize.
+ */
+export const init = async(id) => {
 
   spinneroverlay.initspinneroverlay();
   spinneroverlay.showspinneroverlay();
 
   if (id == 0) {
-    // Generate list
     const response = await getList();
     const listData = response.data;
     renderList(listData);
   }
 
   if (id != 0) {
-    SmartReport.init(id);
+    LionAiReport.init(id);
   }
 };

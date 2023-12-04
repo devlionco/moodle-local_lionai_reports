@@ -17,21 +17,19 @@
 /**
  * Plugin upgrade steps are defined here.
  *
- * @package     local_smartreport
+ * @package     local_lionai_reports
  * @category    upgrade
  * @copyright   2023 Devlion <info@devlion.co>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
- * Execute local_smartreport upgrade from the given old version.
+ * Execute local_lionai_reports upgrade from the given old version.
  *
  * @param int $oldversion
  * @return bool
  */
-function xmldb_local_smartreport_upgrade($oldversion) {
+function xmldb_local_lionai_reports_upgrade($oldversion) {
     global $DB;
 
     $dbman = $DB->get_manager();

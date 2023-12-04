@@ -1,17 +1,16 @@
-<div id="smartreport-report">
-    <h5><a href="{{allreportsurl}}">All reports</a></h5>
+<div id="lionai_reports-report">
+    <div class="row">
+        <h2 id="lionai_reports-report-name" class="mb-2 text-muted col-md-8">
+            <span id="edit-name">{{name}}</span>
+            <button id="edit-name-button" class="btn btn-link">
+                <i class="fa fa-pencil"></i>
+            </button>
+        </h2>
 
-    <div class="card">
-        <div class="card-body">
-            <h3 class="card-subtitle mb-2 text-muted">{{name}}<span class="badge badge-light">{{id}}</span></h3>
-            <p class="card-text">
-                Created: {{timecreated}}<br>
-                Modified: {{timemodified}}
-            </p>
-            <p class="card-text">
-                Options: {{options}}<br>
-            </p>
-        </div>
+        <p class="col-md-4">
+            <span class="text-muted">{{#str}}timecreated, local_lionai_reports{{/str}}:</span> {{timecreated}}<br>
+            <span class="text-muted">{{#str}}timemodified, local_lionai_reports{{/str}}:</span> {{timemodified}}
+        </p>
     </div>
 
     <div class="row mb-5">
@@ -20,79 +19,81 @@
         <div class="col-md-8">
 
             <div class="row container mt-3">
-                <textarea id="id_userprompt" class="form-control" rows="5"></textarea>
+                {{!-- TODO: add str --}}
+                <label for="id_userprompt">Add prompt:</label>
+                <textarea id="id_userprompt" class="form-control userprompt-textarea" rows="5">{{lastusercontent}}</textarea>
             </div>
 
             <div class="row container mt-3">
-
                 <button class="btn btn-primary ml-0" name="senduserprompt" id="id_senduserprompt" type="button"
-                    data-toggle="tooltip" data-placement="left" title="You could use CTRL+Enter">
-                    Send prompt
+                    data-toggle="tooltip" data-placement="left" title="{{#str}}ctrlenter, local_lionai_reports{{/str}}">
+                    {{#str}}sendprompt, local_lionai_reports{{/str}}
                 </button>
 
-                <div>
-                    <button type="button" class="btn btn-secondary smartreport-history ml-1" data-toggle="modal"
-                        data-target="#historyModal" id="smartreporthistory" href="#" role="button">
-                        Pick from recent history
+
+                <button type="button" class="btn btn-secondary lionai_reports-history ml-1" data-toggle="modal"
+                    data-target="#historyModal" id="lionai_reportshistory" href="#" role="button">
+                    {{#str}}pickfromhistory, local_lionai_reports{{/str}}
+                </button>
+
+                {{!-- TODO: add title str --}}
+                <div id="ratebtns-wrapper" class="mx-auto">
+                    <button type="button" class="btn btn-outline-success mr-1" id="thmbup" href="#" role="button"
+                        title="{{#str}}thumbupbtn, local_lionai_reports{{/str}}" data-rate="1" data-promptid="{{promptid}}">
+                        <i class="fa fa-thumbs-up" aria-hidden="true"></i>
                     </button>
-                </div>
-                <div class="modal fade" id="historyModal" tabindex="-1" aria-labelledby="historyModalLabel"
-                    aria-hidden="true">
-                    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="historyModalLabel">Pick from recent history</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <div class="smartreport-history-list list-group list-group-flush">
-                                    {{#history}}
-                                    <li class="list-group-item list-group-item-action text-info smartreport-history-list-item {{classes}}"
-                                        href="#" role="button" data-role="{{role}}">
-                                        {{{content}}}</li>
-                                    {{/history}}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+
+                    <button type="button" class="btn btn-outline-danger" id="thmbdown" href="#" role="button"
+                        title="{{#str}}thumbdownbtn, local_lionai_reports{{/str}}" data-rate="-1" data-promptid="{{promptid}}">
+                        <i class="fa fa-thumbs-down" aria-hidden="true"></i>
+                    </button>
                 </div>
 
                 <div class="dropdown ml-auto">
-                    <a class="btn btn-outline-info dropdown-toggle smartreport-examples ml-1" href="#" role="button"
+                    <a class="btn btn-outline-info dropdown-toggle lionai_reports-examples" href="#" role="button"
                         data-toggle="dropdown" aria-expanded="false">
-                        Examples
+                        {{#str}}examples, local_lionai_reports{{/str}}
                     </a>
-                    <div class="dropdown-menu smartreport-examples-list">
+                    <div class="dropdown-menu lionai_reports-examples-list">
                         <a class="dropdown-item" href="#">
-                            List all forum posts
+                            {{#str}}example1, local_lionai_reports{{/str}}
                         </a>
                         <a class="dropdown-item" href="#">
-                            Show all users first and last names with last login date in dd.mm.yy
+                            {{#str}}example2, local_lionai_reports{{/str}}
                         </a>
                         <a class="dropdown-item" href="#">
-                            Give me users whose first names contain the letter A and emails contain the digit 2
+                            {{#str}}example3, local_lionai_reports{{/str}}
                         </a>
-                        <a class="dropdown-item" href="#">gt ll srs</a>
+                        <a class="dropdown-item" href="#">
+                            {{#str}}example4, local_lionai_reports{{/str}}
+                        </a>
+                        <a class="dropdown-item" href="#">
+                            {{#str}}example5, local_lionai_reports{{/str}}
+                        </a>
                     </div>
                 </div>
-
             </div>
 
             <div class="row container mt-3">
-                <textarea id="id_querysql" class="form-control" rows="5"></textarea>
+                <textarea id="id_querysql" class="form-control" rows="5">{{lastassistantcontent}}</textarea>
             </div>
-
-        </div>
-
-    </div>
-
-    <div class="row mb-5">
-        <div id="id_queryresultmessage" class="">
-        </div>
-        <div id="" class="">
-            <a role="button" href="#" class="d-none btn btn-success mb-3 ml-3" id ="id_trytofix">Try to fix</a>
+            <div class="row container mt-3">
+                <button class="btn btn-primary ml-0" name="getresult" id="id_getresult" type="button"
+                    data-toggle="tooltip" data-placement="left" title="{{#str}}getresult, local_lionai_reports{{/str}}">
+                    {{#str}}getresult, local_lionai_reports{{/str}}
+                </button>
+            </div>
+            <div class="row container mt-3">
+                <div id="id_queryresultmessage" class="d-none alert alert-warning">
+                </div>
+            </div>
+            <div class="row container">
+                <div id="" class="">
+                    <a role="button" href="#" class="d-none btn btn-success mb-3" id="id_trytofix">{{#str}}trytofix,
+                        local_lionai_reports{{/str}}
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
 

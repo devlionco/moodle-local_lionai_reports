@@ -17,15 +17,15 @@
 /**
  * Plugin version and other meta-data are defined here.
  *
- * @package     local_smartreport
+ * @package     local_lionai_reports
  * @copyright   2023 Devlion <info@devlion.co>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->component = 'local_smartreport';
-$plugin->release = '0.1.0';
-$plugin->version = 2023100500;
+$plugin->component = 'local_lionai_reports';
+$plugin->release = '1.0.0';
+$plugin->version = 2023101902;
 $plugin->requires = 2020061500;
-$plugin->maturity = MATURITY_ALPHA;
+$plugin->maturity = MATURITY_STABLE;
