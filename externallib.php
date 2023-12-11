@@ -57,6 +57,10 @@ class local_lionai_reports_external extends external_api {
      */
     public static function getlist() {
         global $USER;
+        if (!is_siteadmin()) {
+            throw new \moodle_exception(get_string('permission_require', 'local_lionai_reports'));
+            return;
+        }
 
         $params = self::validate_parameters(self::getlist_parameters(),
             []);
@@ -106,6 +110,11 @@ class local_lionai_reports_external extends external_api {
      * @return array of response data
      */
     public static function getreport($id) {
+        if (!is_siteadmin()) {
+            throw new \moodle_exception(get_string('permission_require', 'local_lionai_reports'));
+            return;
+        }
+
         $params = self::validate_parameters(self::getreport_parameters(),
             []);
 
@@ -170,6 +179,11 @@ class local_lionai_reports_external extends external_api {
      * @return array of response data
      */
     public static function getresult($query, $reportid) {
+        if (!is_siteadmin()) {
+            throw new \moodle_exception(get_string('permission_require', 'local_lionai_reports'));
+            return;
+        }
+
         $params = self::validate_parameters(self::getresult_parameters(),
             []);
 
@@ -232,6 +246,11 @@ class local_lionai_reports_external extends external_api {
      */
     public static function send_prompt($reportid, $prompt, $engine = null, $promptid = null) {
         global $CFG, $DB;
+
+        if (!is_siteadmin()) {
+            throw new \moodle_exception(get_string('permission_require', 'local_lionai_reports'));
+            return;
+        }
 
         $params = self::validate_parameters(
             self::send_prompt_parameters(),
@@ -316,6 +335,10 @@ class local_lionai_reports_external extends external_api {
      */
     public static function rate_prompt($promptid, $rate) {
         global $CFG, $DB;
+        if (!is_siteadmin()) {
+            throw new \moodle_exception(get_string('permission_require', 'local_lionai_reports'));
+            return;
+        }
 
         $params = self::validate_parameters(
             self::rate_prompt_parameters(),
@@ -380,6 +403,12 @@ class local_lionai_reports_external extends external_api {
      * @return array the response with data about the update status
      */
     public static function updatereport($id, $action, $data) {
+
+        if (!is_siteadmin()) {
+            throw new \moodle_exception(get_string('permission_require', 'local_lionai_reports'));
+            return;
+        }
+
         $params = self::validate_parameters(self::updatereport_parameters(),
             [
                 'id' => $id,

@@ -1,0 +1,36 @@
+#page-local-lionai_reports-index {
+
+    .action-btns {
+        button {
+            cursor: pointer;
+            border-left: none;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: 1rem;
+            overflow: hidden;
+            min-height: 2rem;
+            min-width: 2rem;
+
+            &[data-name="delete"] {
+                background-image: url([[pix:local_lionai_reports|trash-solid]]);
+            }
+
+            &[data-name="exportcrauto"] {
+                background-image: url([[pix:local_lionai_reports|plus-solid]]);
+            }
+
+            &[data-name="exportcrxml"] {
+                background-image: url([[pix:local_lionai_reports|xml]]);
+            }
+
+            &[data-name="exportsql"] {
+                background-image: url([[pix:local_lionai_reports|file-code]]);
+            }
+
+            &[data-name="exportcsvw"] {
+                background-image: url([[pix:local_lionai_reports|file-csv]]);
+            }
+        }
+    }
+
+}

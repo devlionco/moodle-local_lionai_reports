@@ -21,7 +21,8 @@
             <div class="row container mt-3">
                 {{!-- TODO: add str --}}
                 <label for="id_userprompt">Add prompt:</label>
-                <textarea id="id_userprompt" class="form-control userprompt-textarea" rows="5">{{lastusercontent}}</textarea>
+                <textarea id="id_userprompt" class="form-control userprompt-textarea"
+                    rows="5">{{lastusercontent}}</textarea>
             </div>
 
             <div class="row container mt-3">
@@ -30,21 +31,54 @@
                     {{#str}}sendprompt, local_lionai_reports{{/str}}
                 </button>
 
-
+                {{#lastusercontent}}
                 <button type="button" class="btn btn-secondary lionai_reports-history ml-1" data-toggle="modal"
                     data-target="#historyModal" id="lionai_reportshistory" href="#" role="button">
                     {{#str}}pickfromhistory, local_lionai_reports{{/str}}
                 </button>
+                
+
+                {{#actions}}
+                <div class="d-flex align-items-center ml-auto mr-auto action-btns">
+                    <form action="{{{exportcrautoactionurl}}}" target="_blank" method="post" class="m-0 mr-2">
+                        <input type="hidden" name="autoimport" value="1">
+                        <input type="hidden" name="sesskey" value="{{sesskey}}">
+                        <button type="submit" class="p-2 btn btn-secondary btn-sm" data-toggle="tooltip" data-html="true"
+                            data-placement="left" data-name="exportcrauto"
+                            title="{{#str}} exportcrautowarning, local_lionai_reports{{/str}}"></button>
+                    </form>
+                    <form action="{{{exportcrxmlactionurl}}}" method="post" class="m-0 mr-2">
+                        <input type="hidden" name="autoimport" value="0">
+                        <input type="hidden" name="sesskey" value="{{sesskey}}">
+                        <button type="submit" class="p-2 btn btn-secondary btn-sm" data-toggle="tooltip" data-html="true"
+                            data-placement="left" data-name="exportcrxml"
+                            title="{{#str}} exportcrxmlwarning, local_lionai_reports{{/str}}"></button>
+                    </form>
+                    <form action="{{{exportsqlactionurl}}}" method="post" class="m-0 mr-2">
+                        <input type="hidden" name="autoimport" value="0">
+                        <input type="hidden" name="sesskey" value="{{sesskey}}">
+                        <button type="submit" class="p-2 btn btn-secondary btn-sm" data-toggle="tooltip" data-html="true"
+                            data-placement="left" data-name="exportsql"
+                            title="{{#str}} exportsqlwarning, local_lionai_reports{{/str}}"></button>
+                    </form>
+                    <button onclick=" window.open('{{{exportcsvactionurl}}}','_blank')" type="submit"
+                        class="p-2 btn btn-secondary btn-sm" data-toggle="tooltip" data-html="true" data-name="exportcsvw"
+                        data-placement="left" title="{{#str}} exportcsvwarning, local_lionai_reports{{/str}}"></button>
+                </div>
+                {{/actions}}
+                {{/lastusercontent}}
 
                 {{!-- TODO: add title str --}}
                 <div id="ratebtns-wrapper" class="mx-auto">
                     <button type="button" class="btn btn-outline-success mr-1" id="thmbup" href="#" role="button"
-                        title="{{#str}}thumbupbtn, local_lionai_reports{{/str}}" data-rate="1" data-promptid="{{promptid}}">
+                        title="{{#str}}thumbupbtn, local_lionai_reports{{/str}}" data-rate="1"
+                        data-promptid="{{promptid}}">
                         <i class="fa fa-thumbs-up" aria-hidden="true"></i>
                     </button>
 
                     <button type="button" class="btn btn-outline-danger" id="thmbdown" href="#" role="button"
-                        title="{{#str}}thumbdownbtn, local_lionai_reports{{/str}}" data-rate="-1" data-promptid="{{promptid}}">
+                        title="{{#str}}thumbdownbtn, local_lionai_reports{{/str}}" data-rate="-1"
+                        data-promptid="{{promptid}}">
                         <i class="fa fa-thumbs-down" aria-hidden="true"></i>
                     </button>
                 </div>

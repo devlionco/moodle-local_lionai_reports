@@ -26,7 +26,7 @@ import Ajax from "core/ajax";
 import Notification from "core/notification";
 import Templates from "core/templates";
 import spinneroverlay from "./spinneroverlay";
-import DataTable from "https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js";
+import DataTable from "./jquery.dataTables";
 import ModalFactory from 'core/modal_factory';
 import ModalEvents from 'core/modal_events';
 import {get_string as getString} from 'core/str';

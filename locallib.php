@@ -84,6 +84,25 @@ function local_lionai_reports_getreport($id = 0) {
     $conditions['id'] = $id;
     $record = $DB->get_record($table, $conditions);
 
+    $record->link = (new moodle_url('/local/lionai_reports/', ['id' => $record->id]))->out();
+    $record->actions = new stdClass();
+    $record->actions->sesskey = sesskey();
+    $record->actions->deleteactionurl = (new moodle_url('/local/lionai_reports/', ['id' => $record->id]))->out();
+    $record->actions->exportcrautoactionurl = (new moodle_url('/local/lionai_reports/',
+            ['id' => $record->id, 'export' => 'confreports']))->out();
+    $record->actions->exportcrxmlactionurl = (new moodle_url('/local/lionai_reports/',
+            ['id' => $record->id, 'export' => 'confreports']))->out();
+    $record->actions->exportsqlactionurl = (new moodle_url('/local/lionai_reports/',
+            ['id' => $record->id, 'export' => 'sqlformat']))->out();
+    $record->actions->exportcsvactionurl = (new moodle_url('/local/lionai_reports/export.php',
+            ['id' => $record->id]))->out();
+
+    $options = json_decode($record->options, true);
+
+    $record->lastmessages = local_lionai_reports_getlast_messages($options['history']);
+
+    $list[] = $record;
+
     $history = json_decode($record->options)->history ?? [];
 
     foreach ($history as $key => $value) {
