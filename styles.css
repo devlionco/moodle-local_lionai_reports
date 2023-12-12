@@ -1,25 +1,25 @@
 #page-local-lionai_reports-index .action-btns button {
-  cursor: pointer;
-  border-left: none;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: 1rem;
-  overflow: hidden;
-  min-height: 2rem;
-  min-width: 2rem;
+    cursor: pointer;
+    border-left: none;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 1rem;
+    overflow: hidden;
+    min-height: 2rem;
+    min-width: 2rem;
 }
-#page-local-lionai_reports-index .action-btns button[data-name=delete] {
-  background-image: url([[pix:local_lionai_reports|trash-solid]]);
+#page-local-lionai_reports-index .action-btns button[data-name="delete"] {
+    background-image: url([[pix:local_lionai_reports|trash-solid]]);
 }
-#page-local-lionai_reports-index .action-btns button[data-name=exportcrauto] {
-  background-image: url([[pix:local_lionai_reports|plus-solid]]);
+#page-local-lionai_reports-index .action-btns button[data-name="exportcrauto"] {
+    background-image: url([[pix:local_lionai_reports|plus-solid]]);
 }
-#page-local-lionai_reports-index .action-btns button[data-name=exportcrxml] {
-  background-image: url([[pix:local_lionai_reports|xml]]);
+#page-local-lionai_reports-index .action-btns button[data-name="exportcrxml"] {
+    background-image: url([[pix:local_lionai_reports|xml]]);
 }
-#page-local-lionai_reports-index .action-btns button[data-name=exportsql] {
-  background-image: url([[pix:local_lionai_reports|file-code]]);
+#page-local-lionai_reports-index .action-btns button[data-name="exportsql"] {
+    background-image: url([[pix:local_lionai_reports|file-code]]);
 }
-#page-local-lionai_reports-index .action-btns button[data-name=exportcsvw] {
-  background-image: url([[pix:local_lionai_reports|file-csv]]);
-}/*# sourceMappingURL=styles.css.map */
+#page-local-lionai_reports-index .action-btns button[data-name="exportcsvw"] {
+    background-image: url([[pix:local_lionai_reports|file-csv]]);
+} /*# sourceMappingURL=styles.css.map */

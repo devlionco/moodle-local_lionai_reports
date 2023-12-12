@@ -1,3 +1,6 @@
+{{!
+    @template local_lionai_reports/report
+}}
 <div id="lionai_reports-report">
     <div class="row">
         <h2 id="lionai_reports-report-name" class="mb-2 text-muted col-md-8">
@@ -33,10 +36,9 @@
 
                 {{#lastusercontent}}
                 <button type="button" class="btn btn-secondary lionai_reports-history ml-1" data-toggle="modal"
-                    data-target="#historyModal" id="lionai_reportshistory" href="#" role="button">
+                    data-target="#historyModal" id="lionai_reportshistory" role="button">
                     {{#str}}pickfromhistory, local_lionai_reports{{/str}}
                 </button>
-                
 
                 {{#actions}}
                 <div class="d-flex align-items-center ml-auto mr-auto action-btns">
@@ -61,7 +63,7 @@
                             data-placement="left" data-name="exportsql"
                             title="{{#str}} exportsqlwarning, local_lionai_reports{{/str}}"></button>
                     </form>
-                    <button onclick=" window.open('{{{exportcsvactionurl}}}','_blank')" type="submit"
+                    <button onclick="window.open('{{{exportcsvactionurl}}}','_blank')" type="submit"
                         class="p-2 btn btn-secondary btn-sm" data-toggle="tooltip" data-html="true" data-name="exportcsvw"
                         data-placement="left" title="{{#str}} exportcsvwarning, local_lionai_reports{{/str}}"></button>
                 </div>
@@ -70,13 +72,13 @@
 
                 {{!-- TODO: add title str --}}
                 <div id="ratebtns-wrapper" class="mx-auto">
-                    <button type="button" class="btn btn-outline-success mr-1" id="thmbup" href="#" role="button"
+                    <button type="button" class="btn btn-outline-success mr-1" id="thmbup" role="button"
                         title="{{#str}}thumbupbtn, local_lionai_reports{{/str}}" data-rate="1"
                         data-promptid="{{promptid}}">
                         <i class="fa fa-thumbs-up" aria-hidden="true"></i>
                     </button>
 
-                    <button type="button" class="btn btn-outline-danger" id="thmbdown" href="#" role="button"
+                    <button type="button" class="btn btn-outline-danger" id="thmbdown" role="button"
                         title="{{#str}}thumbdownbtn, local_lionai_reports{{/str}}" data-rate="-1"
                         data-promptid="{{promptid}}">
                         <i class="fa fa-thumbs-down" aria-hidden="true"></i>
@@ -122,11 +124,9 @@
                 </div>
             </div>
             <div class="row container">
-                <div id="" class="">
-                    <a role="button" href="#" class="d-none btn btn-success mb-3" id="id_trytofix">{{#str}}trytofix,
-                        local_lionai_reports{{/str}}
-                    </a>
-                </div>
+                <a role="button" href="#" class="d-none btn btn-success mb-3" id="id_trytofix">{{#str}}trytofix,
+                    local_lionai_reports{{/str}}
+                </a>
             </div>
         </div>
     </div>
