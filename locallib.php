@@ -335,6 +335,7 @@ function local_lionai_reports_export_confreports($id, $autoimport = false) {
         'lastexecutiontime' => '1',
         'cron' => '0',
         'remote' => '0',
+        'export' => 'csv,xls,' ,
     ];
 
     $reportdata['name'] = "[lionai_reports] promt: " . $report->name;
