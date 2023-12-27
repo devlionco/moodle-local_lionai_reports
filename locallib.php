@@ -44,13 +44,15 @@ function local_lionai_reports_getlist($userid = 0) {
     $sort = 'timemodified DESC';
     $records = $DB->get_records($table, $conditions, $sort);
 
+    $crexists = local_lionai_reports_check_for_cr();
+
     foreach ($records as $record) {
         $record->link = (new moodle_url('/local/lionai_reports/', ['id' => $record->id]))->out();
         $record->actions = new stdClass();
         $record->actions->sesskey = sesskey();
         $record->actions->deleteactionurl = (new moodle_url('/local/lionai_reports/', ['id' => $record->id]))->out();
-        $record->actions->exportcrautoactionurl = (new moodle_url('/local/lionai_reports/',
-                ['id' => $record->id, 'export' => 'confreports']))->out();
+        $record->actions->exportcrautoactionurl = $crexists ? (new moodle_url('/local/lionai_reports/',
+                ['id' => $record->id, 'export' => 'confreports']))->out() : '';
         $record->actions->exportcrxmlactionurl = (new moodle_url('/local/lionai_reports/',
                 ['id' => $record->id, 'export' => 'confreports']))->out();
         $record->actions->exportsqlactionurl = (new moodle_url('/local/lionai_reports/',
@@ -84,12 +86,14 @@ function local_lionai_reports_getreport($id = 0) {
     $conditions['id'] = $id;
     $record = $DB->get_record($table, $conditions);
 
+    $crexists = local_lionai_reports_check_for_cr();
+
     $record->link = (new moodle_url('/local/lionai_reports/', ['id' => $record->id]))->out();
     $record->actions = new stdClass();
     $record->actions->sesskey = sesskey();
     $record->actions->deleteactionurl = (new moodle_url('/local/lionai_reports/', ['id' => $record->id]))->out();
-    $record->actions->exportcrautoactionurl = (new moodle_url('/local/lionai_reports/',
-            ['id' => $record->id, 'export' => 'confreports']))->out();
+    $record->actions->exportcrautoactionurl = $crexists ? (new moodle_url('/local/lionai_reports/',
+            ['id' => $record->id, 'export' => 'confreports']))->out() : '';
     $record->actions->exportcrxmlactionurl = (new moodle_url('/local/lionai_reports/',
             ['id' => $record->id, 'export' => 'confreports']))->out();
     $record->actions->exportsqlactionurl = (new moodle_url('/local/lionai_reports/',
@@ -384,8 +388,7 @@ function local_lionai_reports_export_confreports($id, $autoimport = false) {
 
     // If autoimport && function cr_import_xml is present.
     if ($autoimport) {
-        require_once($CFG->dirroot . '/blocks/configurable_reports/locallib.php');
-        if (function_exists('cr_import_xml')) {
+        if (local_lionai_reports_check_for_cr()) {
             $reportid = local_lionai_reports_cr_import_xml($data, $course);
             if ($reportid) {
                 redirect("$CFG->wwwroot/blocks/configurable_reports/viewreport.php?id={$reportid}",
@@ -395,6 +398,27 @@ function local_lionai_reports_export_confreports($id, $autoimport = false) {
             }
         }
     }
+}
+
+/**
+ * Checks if the CR (Configurable Reports) plugin is available.
+ *
+ * @return bool True if CR is available, false otherwise.
+ */
+function local_lionai_reports_check_for_cr() {
+    global $CFG;
+
+    if (!file_exists($CFG->dirroot . '/blocks/configurable_reports/locallib.php')) {
+        return false;
+    }
+
+    require_once($CFG->dirroot . '/blocks/configurable_reports/locallib.php');
+
+    if (!function_exists('cr_import_xml')) {
+        return false;
+    }
+
+    return true;
 }
 
 /**
