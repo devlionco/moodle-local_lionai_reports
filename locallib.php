@@ -335,7 +335,6 @@ function local_lionai_reports_export_confreports($id, $autoimport = false) {
         'summaryformat' => '1',
         'type' => 'sql',
         'pagination' => '0',
-        'export' => '',
         'jsordering' => '1',
         'global' => '0',
         'lastexecutiontime' => '1',

@@ -64,4 +64,4 @@ $string['lionai_reports_limitrecordsinfo'] = 'Choose the number of records that 
 $string['limited_to'] = '"LIMIT" keyword not allowed. Limited to {$a} records';
 $string['permission_require'] = "You don't have permission, Only site admins can use this plugin.";
 $string['not_eligible_message'] = 'Seems like your API key is wrong or you exceeded the 10 complimentary prompt executions per week in the free version. To get the Pro version, contact us at info@devlion.co';
-$string['no_data_found'] = 'This query did not return ant results';
+$string['no_data_found'] = 'This query did not return any results';
