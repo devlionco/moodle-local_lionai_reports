@@ -199,6 +199,10 @@ class local_lionai_reports_external extends external_api {
 
         $result = $status;
 
+        if (empty($resultdata) && empty($message)) {
+            $message = get_string('no_data_found','local_lionai_reports');
+        }
+
         $response = new stdClass;
         $response->result = $result;
         $response->message = $message;
