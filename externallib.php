@@ -228,7 +228,7 @@ class local_lionai_reports_external extends external_api {
         return new external_function_parameters(
             [
                 'reportid' => new external_value(PARAM_INT, 'The report id', VALUE_REQUIRED),
-                'prompt' => new external_value(PARAM_TEXT, 'Prompt', VALUE_REQUIRED),
+                'prompt' => new external_value(PARAM_RAW, 'Prompt', VALUE_REQUIRED),
                 'engine' => new external_value(PARAM_ALPHANUMEXT, 'engine', VALUE_OPTIONAL),
                 'promptid' => new external_value(PARAM_ALPHANUMEXT, 'promptid', VALUE_OPTIONAL),
             ]

@@ -101,6 +101,8 @@ function local_lionai_reports_getreport($id = 0) {
     $record->actions->exportcsvactionurl = (new moodle_url('/local/lionai_reports/export.php',
             ['id' => $record->id]))->out();
 
+    $record->actions->is_new = empty($record->options) ? 'd-none' : 'd-flex';
+
     $options = json_decode($record->options, true);
 
     $record->lastmessages = local_lionai_reports_getlast_messages($options['history']);
@@ -339,6 +341,7 @@ function local_lionai_reports_export_confreports($id, $autoimport = false) {
         'lastexecutiontime' => '1',
         'cron' => '0',
         'remote' => '0',
+        'export' => 'csv,xls,' ,
     ];
 
     $reportdata['name'] = "[lionai_reports] promt: " . $report->name;

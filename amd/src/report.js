@@ -522,6 +522,11 @@ const sendPrompt = (prompt) => {
                 clearRateBtnsActiveClass();
                 showElement(Selectors.targets.ratebtnswrapper);
 
+                // Show action buttons.
+                var actionbuttons = document.getElementsByClassName("action-btns")[0];
+                actionbuttons.classList.remove("d-none");
+                actionbuttons.classList.add("d-flex");
+
                 // Set promt id from responce to rate btns.
                 setPromptidToBtns(data.promptid);
 
