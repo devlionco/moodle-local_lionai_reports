@@ -42,7 +42,10 @@
                 {{/lastusercontent}}
 
                 {{#actions}}
+
                 <div class="{{is_new}} align-items-center ml-auto mr-auto action-btns">
+                    {{#exportcrautoactionurl}}
+
                     <form action="{{{exportcrautoactionurl}}}" target="_blank" method="post" class="m-0 mr-2">
                         <input type="hidden" name="autoimport" value="1">
                         <input type="hidden" name="sesskey" value="{{sesskey}}">
@@ -50,6 +53,7 @@
                             data-placement="left" data-name="exportcrauto"
                             title="{{#str}} exportcrautowarning, local_lionai_reports{{/str}}"></button>
                     </form>
+                    {{/exportcrautoactionurl}}
                     <form action="{{{exportcrxmlactionurl}}}" method="post" class="m-0 mr-2">
                         <input type="hidden" name="autoimport" value="0">
                         <input type="hidden" name="sesskey" value="{{sesskey}}">
