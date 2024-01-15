@@ -34,8 +34,9 @@ if (!is_siteadmin()) {
 
 $id = optional_param('id', 0, PARAM_INT);
 $export = optional_param('export', '', PARAM_ALPHANUM);
-
-$autoimport = isset($_POST['autoimport']) && $_POST['autoimport'] == 1 ? 1 : 0;
+$action = optional_param('action', null, PARAM_TEXT);
+$autoimport = optional_param('autoimport', null, PARAM_INT);
+$autoimport = isset($autoimport) && $autoimport == 1 ? 1 : 0;
 
 // TODO: add has_capapblity.
 if ($export) {
@@ -58,11 +59,11 @@ if ($export) {
 }
 
 // Check if the 'action' parameter is set to 'create' in the POST request.
-if (isset($_POST['action'])) {
-    if ($_POST['action'] === 'create') {
+if (isset($action)) {
+    if ($action === 'create') {
         $id = local_lionai_reports_addreport();
     }
-    if ($_POST['action'] === 'delete') {
+    if ($action === 'delete') {
         local_lionai_reports_deletereport($id);
         $id = 0;
     }

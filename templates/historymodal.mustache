@@ -1,5 +1,18 @@
 {{!
     @template local_lionai_reports/historymodal
+
+    Context variables required for this template:
+    * history - History of prompts and queris as list
+
+    Example context (json):
+    {
+        "history": {
+            "classes": "user",
+            "role": "user",
+            "content": "get all users",
+            },
+        },
+    }
 }}
 <div class="list-group lionai_reports-history-list">
     {{#history}}
