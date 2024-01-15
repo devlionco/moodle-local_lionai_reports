@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Run the code checker from the web.
+ * local lionai_reports main page.
  *
  * @package    local_lionai_reports
  * @copyright  2023 Devlion <info@devlion.co>
