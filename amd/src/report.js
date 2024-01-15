@@ -296,7 +296,7 @@ let setqueryresultid = (data) => {
 
     document.getElementById(Selectors.elements.queryresultwrapperid).innerHTML = "";
     const queryResultWrapper = document.getElementById(Selectors.elements.queryresultwrapperid);
-    const tableHtml = '<table class="display" id="id_queryresult"></table>';
+    const tableHtml = '<table class="display w-100" id="id_queryresult"></table>';
     queryResultWrapper.innerHTML = tableHtml;
 
     if (keys.length > 0) {
@@ -311,6 +311,7 @@ let setqueryresultid = (data) => {
             columns: columns,
             data: dataArray,
             scrollX: true,
+            autoWidth: true
         });
     } else {
         // Handle the case where data is empty or has no keys.
