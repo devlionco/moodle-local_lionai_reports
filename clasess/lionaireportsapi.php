@@ -23,7 +23,9 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @since      Moodle 3.9
  */
+namespace local_lionai_reports;
 
+defined('MOODLE_INTERNAL') || die;
 /**
  * class of connecting to API of an AI
  */
