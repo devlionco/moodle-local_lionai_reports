@@ -1,5 +1,30 @@
 {{!
     @template local_lionai_reports/report
+
+    Context variables required for this template:
+    * name - The report name
+    * timecreated - The report timecreated
+    * timemodified - The report timemodified
+    * lastusercontent - The last content that has been used in the report
+    * actions - object of all the possible acions
+    * promptid - promptid
+    * lastassistantcontent - sql qurey
+
+    Example context (json):
+    {
+        "name": "my report",
+        "timecreated": "2/11/23, 14:28",
+        "timemodified": 2/11/23, 14:28,
+        "lastusercontent": "get all users",
+        "actions": {
+            "is_new": yes,
+            "exportcrautoactionurl": "http://localhost/local/lionai_reports/?id=46&export=confreports",
+            "exportcrxmlactionurl": "http://localhost/local/lionai_reports/?id=46&export=confreports",
+            "exportsqlactionurl": "http://localhost/local/lionai_reports/?id=46&export=sqlformat",
+            "exportcsvactionurl": "http://localhost/local/lionai_reports/export.php?id=46",
+        },
+        "lastassistantcontent": "query text",
+    }
 }}
 <div id="lionai_reports-report">
     <div class="row">
