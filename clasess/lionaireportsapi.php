@@ -25,11 +25,10 @@
  */
 namespace local_lionai_reports;
 
-defined('MOODLE_INTERNAL') || die;
 /**
  * class of connecting to API of an AI
  */
-class lionai_reports {
+class lionai_reports_api {
 
     /** @var string */
     private $key;

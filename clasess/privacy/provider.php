@@ -24,8 +24,9 @@
 
 namespace local_lionai_reports\privacy;
 
-defined('MOODLE_INTERNAL') || die();
-
+/**
+ * Privacy provider for plugin
+ */
 class provider implements
 // This plugin does not store any personal user data.
     \core_privacy\local\lionai_reports\null_provider {
