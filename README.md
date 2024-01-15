@@ -10,8 +10,10 @@ LionAI Reports free version allows 10 prompt executions per week. To get the Pro
 In order to use LionAI Reports you need to have one of the following:
 1. Moodle version 4.1
 2. Moodle version 4.2
+3. Moodle version 4.3
 
 Moreover, the plugin requires PHP version of 8.1 and above.
+As well, the plugin is working with SQL queries, therefore is compatible to MySQL-based DB's (such as MySql, MariaDB e.t.c).
 
 ## Installation ##
 ### Installing via uploaded ZIP file ###
@@ -50,6 +52,10 @@ Alternatively, you can run
     $ php admin/cli/upgrade.php
 
 to complete the installation from the command line.
+
+## Location and Managing Pages ##
+You may find the plugin admin settings under _Site administration -> Plugins -> Local plugins -> LionAI Reports_.
+In order to use the plugins, you may find it at location _Site administration -> Reports -> LionAI Reports_.
 
 ## Technical Support ##
 If you have questions or need help integrating LionAI Reports, please contact us (Support@devlion.co) instead of opening an issue
