@@ -1,11 +1,5 @@
 /* eslint-disable jsdoc/empty-tags */
-/* eslint-disable require-jsdoc */
-/* eslint-disable space-before-function-paren */
-/* eslint-disable babel/object-curly-spacing */
-/* eslint-disable jsdoc/require-jsdoc */
-/* eslint-disable no-console */
 /* eslint-disable no-unused-vars */
-/* eslint-disable no-trailing-spaces */
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify

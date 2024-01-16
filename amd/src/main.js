@@ -1,6 +1,5 @@
-/* eslint-disable no-debugger */
 /* eslint-disable jsdoc/empty-tags */
-/* eslint-disable no-console */
+
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -30,7 +29,8 @@
  * @module LionAI_ReportUI
  */
 import Ajax from "core/ajax";
-import Templates from "core/templates";
+import {exception as displayException} from 'core/notification';
+import Templates from 'core/templates';
 import * as LionAiReport from "./report";
 import spinneroverlay from "./spinneroverlay";
 
@@ -83,7 +83,7 @@ const renderList = (listData) => {
 
       return;
     })
-    .catch();
+    .catch((error) => displayException(error));
 };
 
 /**
