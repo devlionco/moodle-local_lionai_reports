@@ -32,7 +32,6 @@ import ModalEvents from 'core/modal_events';
 import {get_string as getString} from 'core/str';
 import * as CodeMirror from "./codemirror";
 
-// eslint-disable-next-line no-unused-vars
 // import "https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/mode/sql/sql.min.js";
 
 const dataTemp = {
@@ -277,7 +276,7 @@ const renderReport = () => {
             };
             return;
         })
-        .catch();
+        .catch((error) => Notification.displayException(error));
 };
 
 
