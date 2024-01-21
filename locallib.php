@@ -224,7 +224,12 @@ function local_lionai_reports_getresult($query = '') {
     $limitrecords = $limitrecords > 500 ? 500 : $limitrecords;
 
     try {
-        $records = $DB->get_records_sql($preparedquery, [], 0, $limitrecords);
+        $records = [];
+        $rs = $DB->get_recordset_sql($preparedquery,null, 0, $limitrecords);
+        foreach ($rs as $record) {
+            $records[] = $record;
+        }
+        $rs->close();
         $status = 2;
         $message .= $trimmed ? get_string('limited_to', 'local_lionai_reports', $limitrecords) : '';
     } catch (Exception $e) {
