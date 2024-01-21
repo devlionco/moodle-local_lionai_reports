@@ -208,7 +208,7 @@ function local_lionai_reports_deletereport($id) {
  *
  * @return array An array containing the execution status, an optional error message, and the query results.
  */
-function local_lionai_reports_getresult($query = '') {
+function local_lionai_reports_getresult($query = '', $limitoff = false) {
     global $DB;
 
     $records = [];
@@ -222,6 +222,7 @@ function local_lionai_reports_getresult($query = '') {
     // Get the limit of records from configuration, and set a max of 500.
     $limitrecords = get_config('local_lionai_reports', 'lionai_reports_limitrecords');
     $limitrecords = $limitrecords > 500 ? 500 : $limitrecords;
+    $limitrecords = $limitoff ? 0 : $limitrecords;
 
     try {
         $records = $DB->get_records_sql($preparedquery, [], 0, $limitrecords);

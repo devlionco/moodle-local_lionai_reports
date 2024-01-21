@@ -44,7 +44,7 @@ $report->lastassistantcontent = json_decode($report->options, true) ? local_lion
 )['lastassistantcontent'] : '';
 $sql = $report->lastassistantcontent;
 $data = $DB->get_records_sql($sql);
-list($status, $message, $data) = local_lionai_reports_getresult($sql);
+list($status, $message, $data) = local_lionai_reports_getresult($sql, true);
 $keys = array_keys((array)$data[array_key_first($data)]);
 
 $context = context_system::instance();
