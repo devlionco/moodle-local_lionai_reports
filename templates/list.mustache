@@ -140,10 +140,10 @@
                             {{/actions}}
                         </div>
                     </td>
-                    <td class="text-muted small">
+                    <td class="text-muted small" data-order="{{timecreated}}">
                         {{#userdate}}{{timecreated}}, {{#str}}strftimedatetimeshort, langconfig{{/str}}{{/userdate}}
                     </td>
-                    <td class="text-muted small">
+                    <td class="text-muted small" data-order="{{timemodified}}">
                         {{#userdate}}{{timemodified}}, {{#str}}strftimedatetimeshort, langconfig{{/str}}{{/userdate}}
                     </td>
                 </tr>
