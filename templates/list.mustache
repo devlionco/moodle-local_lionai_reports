@@ -154,6 +154,9 @@
 </div>
 {{#js}}
 require(['local_lionai_reports/jquery.dataTables', 'jquery'], function(DataTable, $) {
-    $('#lionai_reports-table').DataTable({columnDefs: [{orderable: false, targets: [2, 3]}]});
+    $('#lionai_reports-table').DataTable({
+        columnDefs: [{orderable: false, targets: [2, 3]}],
+        order: [[5, 'desc']]
+        });
 });
 {{/js}}
