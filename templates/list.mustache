@@ -140,10 +140,10 @@
                             {{/actions}}
                         </div>
                     </td>
-                    <td class="text-muted small">
+                    <td class="text-muted small" data-order="{{timecreated}}">
                         {{#userdate}}{{timecreated}}, {{#str}}strftimedatetimeshort, langconfig{{/str}}{{/userdate}}
                     </td>
-                    <td class="text-muted small">
+                    <td class="text-muted small" data-order="{{timemodified}}">
                         {{#userdate}}{{timemodified}}, {{#str}}strftimedatetimeshort, langconfig{{/str}}{{/userdate}}
                     </td>
                 </tr>
@@ -154,6 +154,9 @@
 </div>
 {{#js}}
 require(['local_lionai_reports/jquery.dataTables', 'jquery'], function(DataTable, $) {
-    $('#lionai_reports-table').DataTable({columnDefs: [{orderable: false, targets: [2, 3]}]});
+    $('#lionai_reports-table').DataTable({
+        columnDefs: [{orderable: false, targets: [2, 3]}],
+        order: [[5, 'desc']]
+        });
 });
 {{/js}}
