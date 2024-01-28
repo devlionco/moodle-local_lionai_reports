@@ -282,7 +282,7 @@ class local_lionai_reports_external extends external_api {
 
         $key = get_config('local_lionai_reports', 'lionai_reports_apikey');
         $url = get_config('local_lionai_reports', 'lionai_reports_apiurl');
-        $lionaireports = new local_lionai_reports\lionai_reports_api($key, $url, 'get_query');
+        $lionaireports = new local_lionai_reports\lionai_reports_api($key, $url);
         $response = $lionaireports->send_prompt($prompt);
 
         // Put response to history.
@@ -358,7 +358,7 @@ class local_lionai_reports_external extends external_api {
 
         $key = get_config('local_lionai_reports', 'lionai_reports_apikey');
         $url = get_config('local_lionai_reports', 'lionai_reports_apiurl');
-        $lionaireports = new local_lionai_reports\lionai_reports_api($key, $url, 'get_query');
+        $lionaireports = new local_lionai_reports\lionai_reports_api($key, $url);
         $response = $lionaireports->rate_prompt($promptid, $rate);
 
         return [

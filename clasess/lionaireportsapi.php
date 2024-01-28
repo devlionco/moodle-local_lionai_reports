@@ -55,7 +55,7 @@ class lionai_reports_api {
      * @param string $url
      * @param string $action
      */
-    public function __construct($key, $url, $action = 'get_query') {
+    public function __construct($key, $url, $action = 'reportAction') {
         $this->key = $key;
         $this->url = $url;
         $this->action = $action;
@@ -71,6 +71,8 @@ class lionai_reports_api {
         $promptobj = $this->prepare_prompt($prompt);
 
         $response = $this->send_request($promptobj);
+        $response = json_decode($response);
+
         if ($this->error) {
             return [$this->message, 0];
         }
@@ -100,12 +102,34 @@ class lionai_reports_api {
      * prepare_prompt
      *
      * @param string $prompt
+     *
+     * @return string json encoded of the data
+     */
+    private function prepare_data($prompt) {
+        global $CFG, $DB;
+
+        require("$CFG->dirroot/version.php");
+        require($CFG->libdir.'/environmentlib.php');
+
+        $data = [];
+        $data['moodle_ver'] = normalize_version($release);
+        $data['db_type'] = $CFG->dbtype;
+        $data['sql_request'] = $prompt;
+        //print_r(json_encode($data));
+
+        return json_encode($data);
+    }
+
+    /**
+     * prepare_prompt
+     *
+     * @param string $prompt
      */
     private function prepare_prompt($prompt) {
         $promptobj = [];
-        $promptobj['prompt'] = $prompt;
+        $promptobj['data'] = $this->prepare_data($prompt);
         $promptobj['action'] = $this->action;
-        $promptobj['key'] = $this->key;
+        $promptobj['token'] = $this->key;
         return $promptobj;
     }
 
@@ -140,10 +164,10 @@ class lionai_reports_api {
     private function process_sql_response($response) {
 
         $response = json_decode($response);
-        $this->message = str_replace('\n', "\n", $response->Message);
+        $this->message = str_replace('\n', "\n", $response->message);
         $this->promptid = $response->promptid;
 
-        if (!$response->error) {
+        if (!$response->iserror) {
             return self::extract_sql($this->message);
         } else {
             return [$this->message, 0, $this->promptid];
