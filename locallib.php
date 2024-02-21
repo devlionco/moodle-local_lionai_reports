@@ -219,6 +219,12 @@ function local_lionai_reports_getresult($query = '', $limitoff = false) {
     $preparedquery = local_lionai_reports_removelimitclause($query);
     $trimmed = $preparedquery != $query;
 
+    // Avoid some mean SQL queries.
+    $regex = '/\b(ALTER|CREATE|DELETE|DROP|GRANT|INSERT|INTO|TRUNCATE|UPDATE|SET|VACUUM|REINDEX|DISCARD|LOCK)\b/i';
+    if (preg_match($regex, $preparedquery)) {
+        return [$status, get_string('only_select', 'local_lionai_reports'), $records];
+    }
+
     // Get the limit of records from configuration, and set a max of 500.
     $limitrecords = get_config('local_lionai_reports', 'lionai_reports_limitrecords');
     $limitrecords = $limitrecords > 500 ? 500 : $limitrecords;

@@ -1,8 +1,8 @@
 # LionAI Reports #
 
 ## Introduction ##
-LionAI Reports simplifies report generation in Moodle by enabling administrators to effortlessly write natural language queries, instantly converting them into SQL queries. Preview, edit, and export reports in various formats for seamless data analysis.
-
+LionAI Reports simplifies report generation in Moodle by enabling administrators to effortlessly write natural language queries, instantly converting them into SQL **SELECT** queries. Preview, edit, and export reports in various formats for seamless data analysis.
+**Pay attention, the plugin does not provide, nor allow, altering the DB like in using UPDATE,INSERT or DROP queries, for example.**
 LionAI Reports free version allows 10 prompt executions per week. To get the Pro version, contact us at info@devlion.co
 
 ## Requirements ##

@@ -67,3 +67,4 @@ $string['not_eligible_message'] = 'Seems like your API key is wrong or you excee
 $string['no_data_found'] = 'This query did not return any results';
 $string['thumbupbtn'] = 'Like';
 $string['thumbdownbtn'] = 'Dislike';
+$string['only_select'] = 'Error - only "SELECT" queries allowed!';
