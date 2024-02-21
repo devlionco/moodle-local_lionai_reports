@@ -21,7 +21,7 @@
  * @category   external
  * @copyright  2023 Devlion <info@devlion.co>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @since      Moodle 3.9
+ * @since      Moodle 4.1
  */
 
 defined('MOODLE_INTERNAL') || die;
@@ -35,9 +35,9 @@ require_once($CFG->dirroot . '/local/lionai_reports/clasess/lionaireportsapi.php
  *
  * @package    local_lionai_reports
  * @category   external
- * @copyright  2015 Juan Leyva <juan@moodle.com>
+ * @copyright  2023 Devlion <info@devlion.co>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @since      Moodle 3.0
+ * @since      Moodle 4.1
  */
 class local_lionai_reports_external extends external_api {
 

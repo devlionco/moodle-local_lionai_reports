@@ -19,7 +19,7 @@
  *
  * @package    local_lionai_reports
  * @category   test
- * @copyright  2023 devlion.co
+ * @copyright  2023 Devlion <info@devlion.co>
  * @author     Alex P
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -42,7 +42,7 @@ use Facebook\WebDriver\Exception\StaleElementReferenceException;
  *
  * @package    local_lionai_reports
  * @category   test
- * @copyright  2023 devlion.co
+ * @copyright  2023 Devlion <info@devlion.co>
  * @author     Alex P
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */

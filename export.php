@@ -21,7 +21,7 @@
  * @category   external
  * @copyright  2023 Devlion <info@devlion.co>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @since      Moodle 3.9
+ * @since      Moodle 4.1
  */
 require_once(__DIR__ . '/../../config.php');
 require_once(__DIR__ . '/locallib.php');

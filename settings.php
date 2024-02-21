@@ -40,7 +40,7 @@ if ($hassiteconfig) {
 
         $settingspage->add(new admin_setting_configtext('local_lionai_reports/lionai_reports_apiurl',
                 get_string('lionai_reports_apiurl', 'local_lionai_reports'), '',
-                'https://apireprot.learnapp.io/api.php', PARAM_URL, 35));
+                'https://apireprot.learnapp.io/LionAI/index.php', PARAM_URL, 35));
 
         $settingspage->add(new admin_setting_configtext('local_lionai_reports/lionai_reports_limitrecords',
                 get_string('lionai_reports_limitrecords', 'local_lionai_reports'),

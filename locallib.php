@@ -60,7 +60,7 @@ function local_lionai_reports_getlist($userid = 0) {
         $record->actions->exportcsvactionurl = (new moodle_url('/local/lionai_reports/export.php',
                 ['id' => $record->id]))->out();
 
-        $options = json_decode($record->options, true);
+        $options = empty($record->options) ? ['history' => null] : json_decode($record->options, true);
 
         $record->lastmessages = local_lionai_reports_getlast_messages($options['history']);
 

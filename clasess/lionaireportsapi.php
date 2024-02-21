@@ -21,7 +21,7 @@
  * @category   external
  * @copyright  2023 Devlion <info@devlion.co>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @since      Moodle 3.9
+ * @since      Moodle 4.1
  */
 namespace local_lionai_reports;
 
@@ -71,7 +71,6 @@ class lionai_reports_api {
         $promptobj = $this->prepare_prompt($prompt);
 
         $response = $this->send_request($promptobj);
-        $response = json_decode($response);
 
         if ($this->error) {
             return [$this->message, 0];
@@ -115,7 +114,6 @@ class lionai_reports_api {
         $data['moodle_ver'] = normalize_version($release);
         $data['db_type'] = $CFG->dbtype;
         $data['sql_request'] = $prompt;
-        //print_r(json_encode($data));
 
         return json_encode($data);
     }
@@ -238,25 +236,16 @@ class lionai_reports_api {
      * @param string $data
      */
     private function send_request($data) {
+        global $CFG;
+        require_once($CFG->libdir.'/filelib.php');
 
-        $ch = curl_init();
-        $options = [
-            CURLOPT_URL => $this->url,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_CUSTOMREQUEST => 'POST',
-            CURLOPT_POSTFIELDS => $data,
-        ];
-        curl_setopt_array($ch, $options);
-        $response = curl_exec($ch);
-        if (curl_errno($ch)) {
-            $errormessage = curl_error($ch);
-            curl_close($ch);
+        $ch = new \curl();
+        $response = $ch->post($this->url, $data);
+        if ($ch->get_errno()) {
+            $errormessage = $ch->error;
             $this->error = 1;
             $this->message = "cURL Error: $errormessage";
         }
-        curl_close($ch);
-
         return $response;
     }
-
 }
