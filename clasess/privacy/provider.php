@@ -24,19 +24,29 @@
 
 namespace local_lionai_reports\privacy;
 
+defined('MOODLE_INTERNAL') || die();
+
+use core_privacy\local\metadata\collection;
+
 /**
  * Privacy provider for plugin
  */
 class provider implements
-// This plugin does not store any personal user data.
-    \core_privacy\local\lionai_reports\null_provider {
-
+    // This portfolio plugin does not store any data itself.
+    \core_privacy\local\metadata\provider {
     /**
-     * Returns lionai_reports about this system.
+     * Returns meta data about this plugin.
      *
-     * @return  string
+     * @param   collection $collection The initialised collection to add items to.
+     * @return  collection A listing of user data stored through this plugin.
      */
-    public static function get_reason(): string {
-        return 'privacy:lionai_reports';
+    public static function get_metadata(collection $collection) :collection {
+
+        $collection->add_database_table('local_lionai_reports', [
+                'userid' => 'privacy:metadata:local_lionai_reports:userid',
+                'options' => 'privacy:metadata:local_lionai_reports:options',
+        ], 'privacy:metadata:local_lionai_reports');
+
+        return $collection;
     }
 }
