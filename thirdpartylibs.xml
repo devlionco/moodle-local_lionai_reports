@@ -7,4 +7,10 @@
         <license>MIT</license>
         <licenseversion></licenseversion>
     </library>
+    <location>amd/src/codemirror.js</location>
+    <name>CodeMirror</name>
+    <version>6</version>
+    <license>MIT</license>
+    <licenseversion></licenseversion>
+</library>
 </libraries>
