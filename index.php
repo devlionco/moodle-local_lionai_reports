@@ -32,6 +32,8 @@ if (!is_siteadmin()) {
     return;
 }
 
+global $DB;
+
 $id = optional_param('id', 0, PARAM_INT);
 $export = optional_param('export', '', PARAM_ALPHANUM);
 $action = optional_param('action', null, PARAM_TEXT);
@@ -79,6 +81,11 @@ $PAGE->set_title('LionAI Reports');
 $allreportsurl = $CFG->wwwroot . '/local/lionai_reports';
 $headinghtml = html_writer::link($allreportsurl, get_string('allreports', 'local_lionai_reports'));
 $PAGE->set_heading($headinghtml, false);
+$PAGE->navbar->add(get_string('administrationsite'), $CFG->wwwroot . 'admin/search.php');
+$PAGE->navbar->add(get_string('allreports', 'local_lionai_reports') , $allreportsurl);
+if ($id !== 0) {
+    $PAGE->navbar->add($DB->get_field('local_lionai_reports', 'name', ['id' => $id]) , $allreportsurl);
+}
 
 $PAGE->requires->css(new moodle_url('https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css'));
 
