@@ -150,7 +150,7 @@ class lionai_reports_api {
      * Error handling
      */
     private function has_error() {
-        // TODO: Error handling.
+        // TO DO: Error handling.
         return false;
     }
 

@@ -40,7 +40,6 @@ $action = optional_param('action', null, PARAM_TEXT);
 $autoimport = optional_param('autoimport', null, PARAM_INT);
 $autoimport = isset($autoimport) && $autoimport == 1 ? 1 : 0;
 
-// TODO: add has_capapblity.
 if ($export) {
     switch ($export) {
         case 'confreports':
@@ -52,7 +51,6 @@ if ($export) {
             exit;
             break;
         case 'reportbuilder':
-            // TODO: local_lionai_reports_export reportbuilder.
             exit;
             break;
         default:
@@ -90,8 +88,6 @@ if ($id !== 0) {
 $PAGE->requires->css(new moodle_url('https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css'));
 
 $PAGE->set_url('/local/lionai_reports/index.php', ['id' => $id]);
-
-// TODO: has_capability .
 
 $PAGE->set_cacheable(true);
 echo $OUTPUT->header();

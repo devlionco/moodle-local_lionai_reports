@@ -205,6 +205,7 @@ function local_lionai_reports_deletereport($id) {
  * Executes a SQL query and retrieves the results.
  *
  * @param string $query The SQL query to execute.
+ * @param bool $limitoff whether to use the limit for preview or not, for export.
  *
  * @return array An array containing the execution status, an optional error message, and the query results.
  */
@@ -232,7 +233,7 @@ function local_lionai_reports_getresult($query = '', $limitoff = false) {
 
     try {
         $records = [];
-        $rs = $DB->get_recordset_sql($preparedquery,null, 0, $limitrecords);
+        $rs = $DB->get_recordset_sql($preparedquery, null, 0, $limitrecords);
         foreach ($rs as $record) {
             $records[] = $record;
         }
@@ -397,7 +398,7 @@ function local_lionai_reports_export_confreports($id, $autoimport = false) {
         print($data);
     }
 
-    $courseid = 1; // TODO: Course.
+    $courseid = 1;
     $course = $DB->get_record("course", ['id' => $courseid]);
 
     // If autoimport && function cr_import_xml is present.

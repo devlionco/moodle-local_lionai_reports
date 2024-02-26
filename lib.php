@@ -40,7 +40,7 @@ require_once($CFG->dirroot . '/local/lionai_reports/locallib.php');
  */
 function local_lionai_reports_inplace_editable($itemtype, $itemid, $newvalue) {
     \external_api::validate_context(context_system::instance());
-    if ($itemtype=='lioanai_reports_reportname_editable') {
+    if ($itemtype == 'lioanai_reports_reportname_editable') {
         local_lionai_reports_updatereport($itemid, 'update', json_encode(['name' => $newvalue]));
         $url = new moodle_url('/local/lionai_reports', ['id' => $itemid]);
         $displayvalue = html_writer::link($url, $newvalue);
