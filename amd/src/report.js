@@ -349,6 +349,7 @@ const setSql = (sql) => {
 const showModal = async() => {
     const modal = await ModalFactory.create({
         title: getString('pickfromhistory', 'local_lionai_reports'),
+        large: true,
         body: Templates.render('local_lionai_reports/historymodal', dataTemp.report),
         footer: 'An example footer content',
     });

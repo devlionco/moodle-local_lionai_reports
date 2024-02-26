@@ -129,6 +129,7 @@ class local_lionai_reports_external extends external_api {
         $lastusercontent = $lastmessages['lastusercontent'];
         $lastassistantcontent = $lastmessages['lastassistantcontent'];
 
+        $history = $data['history'];
         $result = true;
         $data = new stdClass;
 
@@ -139,6 +140,22 @@ class local_lionai_reports_external extends external_api {
         $report->timemodified = userdate($report->timemodified, get_string('strftimedaydatetime'));
 
         $data->report = $report;
+        $organizehistory = [];
+        $newlog = null;
+        foreach ($history as $log) {
+            if ($log['role'] == 'user') {
+                if (!empty($newlog)) {
+                    $organizehistory[] = $newlog;
+                }
+                $newlog = [];
+                $newlog['prompt'] = $log;
+            }
+            if ($log['role'] == 'assistant') {
+                $newlog['code'][] = $log;
+            }
+        }
+        $organizehistory[] = $newlog;
+        $data->report->history = $organizehistory;
 
         $response = new stdClass;
         $response->result = $result;

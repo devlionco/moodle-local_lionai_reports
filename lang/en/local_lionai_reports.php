@@ -72,3 +72,5 @@ $string['privacy:metadata:local_lionai_reports'] = 'Information about every repo
 $string['privacy:metadata:local_lionai_reports:userid'] = 'The ID of the user that saved this report.';
 $string['privacy:metadata:local_lionai_reports:options'] = 'The history of the queries and prompts that the user had used in this report.';
 $string['preview'] = 'Preview';
+$string['prompt'] = 'Prompt';
+$string['sqlhistory'] = 'SQL history';
