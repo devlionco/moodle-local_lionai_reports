@@ -68,15 +68,20 @@
                 <tr>
                     <td class="text-muted" style="cursor: pointer;" onclick="window.location.href='{{link}}';">{{id}}
                     </td>
-                    <td style="cursor: pointer;" onclick="window.location.href='{{link}}';">
+                    <td style="cursor: pointer;">
                         {{#name}}
-                        <a href="{{link}}">{{name}}</a>
+                            <div class="inplaceeditable inplaceeditable-text" data-inplaceeditable="1"
+                                  data-component="local_lionai_reports" data-itemtype="lioanai_reports_reportname_editable" data-itemid="{{id}}"
+                                  data-value="{{name}}" data-editlabel="New name for report {{name}}" data-type="text">
+                                <a href="{{link}}" class="aalink">{{name}}</a>
+                                <a href="javascript:void(0);" class="quickeditlink aalink" data-inplaceeditablelink="1" title="New name for report">
+                                    <span class="quickediticon visibleifjs">
+                                        <i class="icon fa fa-pencil fa-fw " title="Edit Name" role="img" aria-label="Edit Name"></i>
+                                    </span>
+                                </a>
+                            </div>
                         {{/name}}
-                        {{^name}}
-                        <a href="{{link}}">
-                            {{#userdate}}{{timecreated}}, {{#str}}strftimedatetime, langconfig{{/str}}{{/userdate}}
-                        </a>
-                        {{/name}}
+                    {{^name}}{{/name}}
                     </td>
                     <td style="cursor: pointer;" onclick="window.location.href='{{link}}';">
                         {{#lastmessages}}
@@ -102,7 +107,7 @@
                                 <form action="{{{deleteactionurl}}}" method="post" class="m-0 mr-2">
                                     <input type="hidden" name="action" value="delete">
                                     <input type="hidden" name="sesskey" value="{{sesskey}}">
-                                    <button type="submit" class="p-2 btn btn-danger btn-sm" data-toggle="tooltip"
+                                    <button type="submit" class="p-2 btn btn-secondary btn-sm" data-toggle="tooltip"
                                         data-html="true" data-placement="left" data-name="delete"
                                         title="{{#str}} deletewarning, local_lionai_reports{{/str}}">
                                     </button>
@@ -159,4 +164,5 @@ require(['local_lionai_reports/jquery.dataTables', 'jquery'], function(DataTable
         order: [[5, 'desc']]
         });
 });
+require(['core/inplace_editable']);
 {{/js}}
