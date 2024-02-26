@@ -68,4 +68,7 @@ $string['no_data_found'] = 'This query did not return any results';
 $string['thumbupbtn'] = 'Like';
 $string['thumbdownbtn'] = 'Dislike';
 $string['only_select'] = 'Error - only "SELECT" queries allowed!';
+$string['privacy:metadata:local_lionai_reports'] = 'Information about every report, including the user who saved the report and the history of prompts and queries.';
+$string['privacy:metadata:local_lionai_reports:userid'] = 'The ID of the user that saved this report.';
+$string['privacy:metadata:local_lionai_reports:options'] = 'The history of the queries and prompts that the user had used in this report.';
 $string['preview'] = 'Preview';
