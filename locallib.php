@@ -437,51 +437,6 @@ function local_lionai_reports_check_for_cr() {
 }
 
 /**
- * Unserializes a variable that was previously serialized with local_lionai_reports_cr_serialize.
- *
- * @param string $var The serialized variable.
- *
- * @return mixed The unserialized variable.
- */
-function local_lionai_reports_cr_unserialize($var) {
-    // It's needed to convert the object to stdClass to avoid __PHP_Incomplete_Class error.
-    $var = preg_replace('/O:6:"object"/', 'O:8:"stdClass"', $var);
-    // To make SQL queries compatible with PostgreSQL it's needed to replace " to '.
-    $var = preg_replace('/THEN\+%22(.+?)%22/', 'THEN+%27${1}%27', $var);
-    $var = preg_replace('/%60/', '+++', $var);
-
-    return local_lionai_reports_urldecode_recursive(unserialize($var));
-}
-
-/**
- * URL-decodes a variable.
- *
- * @param mixed $var The variable to decode.
- *
- * @return mixed The decoded variable.
- */
-function local_lionai_reports_urldecode_recursive($var) {
-    if (is_object($var)) {
-        $newvar = new \stdClass();
-        $properties = get_object_vars($var);
-        foreach ($properties as $property => $value) {
-            $newvar->$property = local_lionai_reports_urldecode_recursive($value);
-        }
-    } else if (is_array($var)) {
-        $newvar = [];
-        foreach ($var as $property => $value) {
-            $newvar[$property] = local_lionai_reports_urldecode_recursive($value);
-        }
-    } else if (is_string($var)) {
-        $newvar = urldecode($var);
-    } else {
-        $newvar = $var;
-    }
-
-    return $newvar;
-}
-
-/**
  * Serializes a variable with support for URL encoding.
  *
  * @param mixed $var The variable to serialize.
