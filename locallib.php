@@ -37,7 +37,7 @@ function local_lionai_reports_getlist($userid = 0) {
     $table = 'local_lionai_reports';
     $conditions = [];
 
-    if ($userid > 0) {
+    if ($userid > 0 && !is_siteadmin()) {
         $conditions['userid'] = $userid;
     }
 
