@@ -43,6 +43,7 @@ $string['example4'] = 'Show all questions with type essay, that have unique name
 $string['example5'] = 'Get version from config of the plugin mod_quiz';
 $string['trytofix'] = 'Try to fix';
 $string['ctrlenter'] = 'You could use CTRL+Enter';
+$string['creator'] = 'Creator';
 $string['lastmessages'] = 'Last messages';
 $string['actions'] = 'Actions';
 $string['deletewarning'] = '<span class=\'text-warning\'>Carefully! Deletes without confirmation</span>';
@@ -59,6 +60,8 @@ $string['lionai_reports_apikey'] = 'API Key';
 $string['lionai_reports_apikeyinfo'] = 'The free version allows you 10 prompt executions per week. To get the Pro version, contact us at <a href="mailto:info@devlion.co">info@devlion.co</a> ';
 $string['lionai_reports_apiurl'] = 'API URL';
 $string['lionai_reports_apiurlinfo'] = 'API URL';
+$string['lionai_reports_allsee'] = 'Reports seen by everyone';
+$string['lionai_reports_allsee_info'] = "Allow all report creators to see reports created by other creators on this site";
 $string['lionai_reports_limitrecords'] = 'Limit of records';
 $string['lionai_reports_limitrecordsinfo'] = 'Choose the number of records that are displayed in the preview table. (Default is 10 records, Maximum is 500 records)';
 $string['limited_to'] = '"LIMIT" keyword not allowed. Limited to {$a} records';

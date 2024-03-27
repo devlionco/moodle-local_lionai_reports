@@ -37,7 +37,7 @@ function local_lionai_reports_getlist($userid = 0) {
     $table = 'local_lionai_reports';
     $conditions = [];
 
-    if ($userid > 0 && !is_siteadmin()) {
+    if ($userid > 0 && get_config('local_lionai_reports', 'lionai_reports_allsee') && !is_siteadmin()) {
         $conditions['userid'] = $userid;
     }
 
@@ -48,6 +48,7 @@ function local_lionai_reports_getlist($userid = 0) {
 
     foreach ($records as $record) {
         $record->link = (new moodle_url('/local/lionai_reports/', ['id' => $record->id]))->out();
+        $record->userfullname = fullname($DB->get_record('user', ['id' => $record->userid]), true);
         $record->actions = new stdClass();
         $record->actions->sesskey = sesskey();
         $record->actions->deleteactionurl = (new moodle_url('/local/lionai_reports/', ['id' => $record->id]))->out();
@@ -89,6 +90,7 @@ function local_lionai_reports_getreport($id = 0) {
     $crexists = local_lionai_reports_check_for_cr();
 
     $record->link = (new moodle_url('/local/lionai_reports/', ['id' => $record->id]))->out();
+    $record->creator = fullname($DB->get_record('user', ['id' => $record->userid]), true);
     $record->actions = new stdClass();
     $record->actions->sesskey = sesskey();
     $record->actions->deleteactionurl = (new moodle_url('/local/lionai_reports/', ['id' => $record->id]))->out();

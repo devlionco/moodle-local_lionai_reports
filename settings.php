@@ -42,6 +42,10 @@ if ($hassiteconfig) {
                 get_string('lionai_reports_apiurl', 'local_lionai_reports'), '',
                 'https://apireprot.learnapp.io/LionAI/index.php', PARAM_URL, 35));
 
+        $settingspage->add(new admin_setting_configcheckbox('local_lionai_reports/lionai_reports_allsee',
+                get_string('lionai_reports_allsee', 'local_lionai_reports'),
+                get_string('lionai_reports_allsee_info', 'local_lionai_reports'), 1));
+
         $settingspage->add(new admin_setting_configtext('local_lionai_reports/lionai_reports_limitrecords',
                 get_string('lionai_reports_limitrecords', 'local_lionai_reports'),
             get_string('lionai_reports_limitrecordsinfo', 'local_lionai_reports'), '10', PARAM_INT, 3));

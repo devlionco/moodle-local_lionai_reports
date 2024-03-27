@@ -49,6 +49,7 @@
                 <tr>
                     <th class="text-muted" style="width: 5%;">{{#str}}id, local_lionai_reports{{/str}}</th>
                     <th class="text-muted" style="width: 20%;">{{#str}}name, local_lionai_reports{{/str}}</th>
+                    <th class="text-muted" style="width: 20%;">{{#str}}creator, local_lionai_reports{{/str}}</th>
                     <th class="text-muted" style="width: 50%;">{{#str}}lastmessages, local_lionai_reports{{/str}}</th>
                     <th class="text-muted" style="width: 8.33%;">{{#str}}actions, local_lionai_reports{{/str}}</th>
                     <th class="text-muted" style="width: 8.33%;">{{#str}}timecreated, local_lionai_reports{{/str}}</th>
@@ -75,6 +76,7 @@
                         {{/name}}
                     {{^name}}{{/name}}
                     </td>
+                    <td class="text-muted" style="cursor: pointer;">{{userfullname}}
                     <td style="cursor: pointer;" onclick="window.location.href='{{link}}';">
                         {{#lastmessages}}
                         <div class="card">
