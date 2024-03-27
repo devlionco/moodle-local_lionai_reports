@@ -77,3 +77,6 @@ $string['privacy:metadata:local_lionai_reports:options'] = 'The history of the q
 $string['preview'] = 'Preview';
 $string['prompt'] = 'Prompt';
 $string['sqlhistory'] = 'SQL history';
+$string['previewtotal'] = 'A total of {$a} results were received.';
+$string['previewnote1'] = 'In the preview table, you can see some of them. To see the full results export the report.';
+$string['previewnote2'] = 'Admins can control the amount of records in the preview table through the settings page.';

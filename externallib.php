@@ -212,7 +212,7 @@ class local_lionai_reports_external extends external_api {
         $historyitem->content = $query;
         local_lionai_reports_put_history($reportid, $historyitem);
 
-        list($status, $message, $resultdata) = local_lionai_reports_getresult($query);
+        list($status, $message, $resultdata, $countrsults) = local_lionai_reports_getresult($query);
 
         $result = $status;
 
@@ -223,6 +223,7 @@ class local_lionai_reports_external extends external_api {
         $response = new stdClass;
         $response->result = $result;
         $response->message = $message;
+        $response->count = $countrsults;
         $response->data = json_encode($resultdata);
 
         return $response;
@@ -237,6 +238,7 @@ class local_lionai_reports_external extends external_api {
         return new external_single_structure([
             'result' => new external_value(PARAM_INT, 'The processing result'),
             'message' => new external_value(PARAM_RAW, 'The processing message'),
+            'count' => new external_value(PARAM_INT, 'count results'),
             'data' => new external_value(PARAM_RAW, 'data'),
         ]);
     }

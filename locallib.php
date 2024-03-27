@@ -234,6 +234,12 @@ function local_lionai_reports_getresult($query = '', $limitoff = false) {
     $limitrecords = $limitoff ? 0 : $limitrecords;
 
     try {
+        $countrecords = $DB->get_recordset_sql($preparedquery);
+        $count = 0 ;
+        foreach ($countrecords as $record) {
+            $count++;
+        }
+        $countrecords->close();
         $records = [];
         $rs = $DB->get_recordset_sql($preparedquery, null, 0, $limitrecords);
         foreach ($rs as $record) {
@@ -246,7 +252,7 @@ function local_lionai_reports_getresult($query = '', $limitoff = false) {
         $message = $e->getMessage();
     }
 
-    return [$status, $message, $records];
+    return [$status, $message, $records, $count];
 }
 
 /**

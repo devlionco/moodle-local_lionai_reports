@@ -58,7 +58,8 @@ const Selectors = {
         queryresultmessage: "id_queryresultmessage",
         thmbup: "thmbup",
         thmbdown: "thmbdown",
-        ratebtnswrapper: "ratebtns-wrapper"
+        ratebtnswrapper: "ratebtns-wrapper",
+        previewwrapper: "previewwrapper"
     },
     targets: {}
 };
@@ -318,6 +319,25 @@ let setqueryresultid = (data) => {
     }
 };
 
+/**
+ * Sets the query result data amount into the preview message and display it.
+ *
+ * @param count - the number of results from the query.
+ */
+let setPreviewMessage = async function(count) {
+    document.getElementById(Selectors.elements.previewwrapper).innerHTML = "";
+
+    const previewWrapper = document.getElementById(Selectors.elements.previewwrapper);
+    const previewTitle = await getString('preview', 'local_lionai_reports');
+    const previewTotal = await getString('previewtotal', 'local_lionai_reports', count);
+    const previewNote1 = await getString('previewnote1', 'local_lionai_reports');
+    const previewNote2 = await getString('previewnote2', 'local_lionai_reports');
+    let previewMessageHtml = '<h2>' + previewTitle + '</h2><br>';
+    previewMessageHtml = previewMessageHtml +  '<span class="font-weight-bold">' + previewTotal + '</span><br>';
+    previewMessageHtml = previewMessageHtml +  '<span>' + previewNote1 + '</span><br>';
+    previewMessageHtml = previewMessageHtml +  '<span class="text-muted">' + previewNote2 + '</span>';
+    previewWrapper.innerHTML = previewMessageHtml;
+};
 
 // TODO: Is it needed?
 // let cm;
@@ -406,8 +426,10 @@ const getResult = (query) => {
             done: function(data) {
                 let result = data.result;
                 let message = data.message;
+                let count = data.count;
                 data = JSON.parse(data.data);
                 setMessage(message, !result);
+                setPreviewMessage(count);
                 setqueryresultid(data);
             },
             fail: function(error) {

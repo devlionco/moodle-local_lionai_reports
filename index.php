@@ -79,10 +79,10 @@ $PAGE->set_title('LionAI Reports');
 $allreportsurl = $CFG->wwwroot . '/local/lionai_reports';
 $headinghtml = html_writer::link($allreportsurl, get_string('allreports', 'local_lionai_reports'));
 $PAGE->set_heading($headinghtml, false);
-$PAGE->navbar->add(get_string('administrationsite'), $CFG->wwwroot . 'admin/search.php');
-$PAGE->navbar->add(get_string('allreports', 'local_lionai_reports') , $allreportsurl);
+$PAGE->navbar->add(get_string('administrationsite'), $CFG->wwwroot . '/admin/category.php?category=lionai_reports');
+$PAGE->navbar->add(get_string('allreports', 'local_lionai_reports'), $allreportsurl);
 if ($id !== 0) {
-    $PAGE->navbar->add($DB->get_field('local_lionai_reports', 'name', ['id' => $id]) , $allreportsurl);
+    $PAGE->navbar->add($DB->get_field('local_lionai_reports', 'name', ['id' => $id]), $allreportsurl);
 }
 
 $PAGE->requires->css('/local/lionai_reports/css/datatables.css');
