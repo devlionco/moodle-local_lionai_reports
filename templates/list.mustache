@@ -45,22 +45,14 @@
 
     <div class="table-responsive">
         <table class="table table-striped" id="lionai_reports-table">
-            <colgroup>
-                <col style="width: 5%;">
-                <col style="width: 20%;">
-                <col style="width: 50%;">
-                <col style="width: 8.33%;">
-                <col style="width: 8.33%;">
-                <col style="width: 8.33%;">
-            </colgroup>
             <thead>
                 <tr>
-                    <th class="text-muted">{{#str}}id, local_lionai_reports{{/str}}</th>
-                    <th class="text-muted">{{#str}}name, local_lionai_reports{{/str}}</th>
-                    <th class="text-muted">{{#str}}lastmessages, local_lionai_reports{{/str}}</th>
-                    <th class="text-muted">{{#str}}actions, local_lionai_reports{{/str}}</th>
-                    <th class="text-muted">{{#str}}timecreated, local_lionai_reports{{/str}}</th>
-                    <th class="text-muted">{{#str}}timemodified, local_lionai_reports{{/str}}</th>
+                    <th class="text-muted" style="width: 5%;">{{#str}}id, local_lionai_reports{{/str}}</th>
+                    <th class="text-muted" style="width: 20%;">{{#str}}name, local_lionai_reports{{/str}}</th>
+                    <th class="text-muted" style="width: 50%;">{{#str}}lastmessages, local_lionai_reports{{/str}}</th>
+                    <th class="text-muted" style="width: 8.33%;">{{#str}}actions, local_lionai_reports{{/str}}</th>
+                    <th class="text-muted" style="width: 8.33%;">{{#str}}timecreated, local_lionai_reports{{/str}}</th>
+                    <th class="text-muted" style="width: 8.33%;">{{#str}}timemodified, local_lionai_reports{{/str}}</th>
                 </tr>
             </thead>
             <tbody>
@@ -161,7 +153,8 @@
 require(['local_lionai_reports/jquery.dataTables', 'jquery'], function(DataTable, $) {
     $('#lionai_reports-table').DataTable({
         columnDefs: [{orderable: false, targets: [2, 3]}],
-        order: [[5, 'desc']]
+        order: [[5, 'desc']],
+        dom: '<"d-flex justify-content-end pb-3"f>t<"pt-3 d-flex justify-content-between align-items-center"lip>'
         });
 });
 require(['core/inplace_editable']);

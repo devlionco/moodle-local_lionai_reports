@@ -85,7 +85,7 @@ if ($id !== 0) {
     $PAGE->navbar->add($DB->get_field('local_lionai_reports', 'name', ['id' => $id]) , $allreportsurl);
 }
 
-$PAGE->requires->css(new moodle_url('https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css'));
+$PAGE->requires->css('/local/lionai_reports/css/datatables.css');
 
 $PAGE->set_url('/local/lionai_reports/index.php', ['id' => $id]);
 

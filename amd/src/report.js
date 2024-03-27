@@ -342,7 +342,6 @@ const setSql = (sql) => {
     getResult(sql);
 };
 
-
 /**
  * Shows the history modal by hiding it.
  */
@@ -357,6 +356,14 @@ const showModal = async() => {
     Selectors.targets.createdModal = modal;
 
     modal.getRoot().on(ModalEvents.bodyRendered, () => {
+        let textarea = modal.getRoot()[0].querySelectorAll('textarea');
+        if (textarea.length > 0) {
+            textarea.forEach(el => {
+                if (el.textLength > 0) {
+                    CodeMirror.editorFromTextArea(el);
+                }
+            });
+        }
         renderHistory();
     });
 
