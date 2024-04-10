@@ -47,16 +47,17 @@ function local_lionai_reports_getlist($userid = 0) {
     $crexists = local_lionai_reports_check_for_cr();
 
     foreach ($records as $record) {
-        $record->link = (new moodle_url('/local/lionai_reports/', ['id' => $record->id]))->out();
+        $record->link = (new moodle_url('/local/lionai_reports/index.php', ['id' => $record->id]))->out();
         $record->userfullname = fullname($DB->get_record('user', ['id' => $record->userid]), true);
         $record->actions = new stdClass();
         $record->actions->sesskey = sesskey();
-        $record->actions->deleteactionurl = (new moodle_url('/local/lionai_reports/', ['id' => $record->id]))->out();
+        $record->actions->deleteactionurl = (new moodle_url('/local/lionai_reports/index.php',
+                ['id' => $record->id, 'action' => 'delete']))->out();
         $record->actions->exportcrautoactionurl = $crexists ? (new moodle_url('/local/lionai_reports/',
                 ['id' => $record->id, 'export' => 'confreports']))->out() : '';
-        $record->actions->exportcrxmlactionurl = (new moodle_url('/local/lionai_reports/',
+        $record->actions->exportcrxmlactionurl = (new moodle_url('/local/lionai_reports/index.php',
                 ['id' => $record->id, 'export' => 'confreports']))->out();
-        $record->actions->exportsqlactionurl = (new moodle_url('/local/lionai_reports/',
+        $record->actions->exportsqlactionurl = (new moodle_url('/local/lionai_reports/index.php',
                 ['id' => $record->id, 'export' => 'sqlformat']))->out();
         $record->actions->exportcsvactionurl = (new moodle_url('/local/lionai_reports/export.php',
                 ['id' => $record->id]))->out();

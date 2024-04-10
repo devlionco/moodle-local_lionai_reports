@@ -76,7 +76,7 @@ $PAGE->set_pagelayout('incourse');
 
 $PAGE->set_title('LionAI Reports');
 
-$allreportsurl = $CFG->wwwroot . '/local/lionai_reports';
+$allreportsurl = $CFG->wwwroot . '/local/lionai_reports/index.php';
 $headinghtml = html_writer::link($allreportsurl, get_string('allreports', 'local_lionai_reports'));
 $PAGE->set_heading($headinghtml, false);
 $PAGE->navbar->add(get_string('administrationsite'), $CFG->wwwroot . '/admin/category.php?category=lionai_reports');
