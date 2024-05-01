@@ -43,17 +43,17 @@
         <button class="btn btn-primary" type="submit">Add New Report</button>
     </form>
 
-    <div class="table-responsive">
+    <div class="table-responsive" style="overflow-x: visible">
         <table class="table table-striped" id="lionai_reports-table">
             <thead>
                 <tr>
                     <th class="text-muted" style="width: 5%;">{{#str}}id, local_lionai_reports{{/str}}</th>
                     <th class="text-muted" style="width: 20%;">{{#str}}name, local_lionai_reports{{/str}}</th>
-                    <th class="text-muted" style="width: 20%;">{{#str}}creator, local_lionai_reports{{/str}}</th>
+                    <th class="text-muted" style="width: 10%;">{{#str}}creator, local_lionai_reports{{/str}}</th>
                     <th class="text-muted" style="width: 50%;">{{#str}}lastmessages, local_lionai_reports{{/str}}</th>
-                    <th class="text-muted" style="width: 8.33%;">{{#str}}actions, local_lionai_reports{{/str}}</th>
-                    <th class="text-muted" style="width: 8.33%;">{{#str}}timecreated, local_lionai_reports{{/str}}</th>
-                    <th class="text-muted" style="width: 8.33%;">{{#str}}timemodified, local_lionai_reports{{/str}}</th>
+                    <th class="text-muted" style="width: 5%;">{{#str}}actions, local_lionai_reports{{/str}}</th>
+                    <th class="text-muted" style="width: 5%;">{{#str}}timecreated, local_lionai_reports{{/str}}</th>
+                    <th class="text-muted" style="width: 5%;">{{#str}}timemodified, local_lionai_reports{{/str}}</th>
                 </tr>
             </thead>
             <tbody>
@@ -155,7 +155,7 @@
 require(['local_lionai_reports/jquery.dataTables', 'jquery'], function(DataTable, $) {
     $('#lionai_reports-table').DataTable({
         columnDefs: [{orderable: false, targets: [2, 3]}],
-        order: [[5, 'desc']],
+        order: [[6, 'desc']],
         dom: '<"d-flex justify-content-end pb-3"f>t<"pt-3 d-flex justify-content-between align-items-center"lip>'
         });
 });
