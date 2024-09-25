@@ -28,7 +28,7 @@ defined('MOODLE_INTERNAL') || die;
 
 require_once($CFG->libdir . '/externallib.php');
 require_once($CFG->dirroot . '/local/lionai_reports/locallib.php');
-require_once($CFG->dirroot . '/local/lionai_reports/clasess/lionaireportsapi.php');
+require_once($CFG->dirroot . '/local/lionai_reports/clasess/lionai_reports_api.php');
 
 /**
  * External tool module external functions

@@ -25,6 +25,8 @@
  */
 namespace local_lionai_reports;
 
+defined('MOODLE_INTERNAL') || die;
+
 /**
  * class of connecting to API of an AI
  */
