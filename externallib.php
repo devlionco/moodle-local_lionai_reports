@@ -67,6 +67,8 @@ class local_lionai_reports_external extends external_api {
 
         $context = context_system::instance();
 
+        self::validate_context($context);
+
         $list = local_lionai_reports_getlist($USER->id);
 
         $result = true;
@@ -119,6 +121,8 @@ class local_lionai_reports_external extends external_api {
             []);
 
         $context = context_system::instance();
+
+        self::validate_context($context);
 
         $report = local_lionai_reports_getreport($id);
 
@@ -205,6 +209,8 @@ class local_lionai_reports_external extends external_api {
             []);
 
         $context = context_system::instance();
+
+        self::validate_context($context);
 
         // Put response to history.
         $historyitem = new stdClass;
@@ -440,6 +446,8 @@ class local_lionai_reports_external extends external_api {
             ]);
 
         $context = context_system::instance();
+
+        self::validate_context($context);
 
         $result = local_lionai_reports_updatereport($id, $action, $data);
 
