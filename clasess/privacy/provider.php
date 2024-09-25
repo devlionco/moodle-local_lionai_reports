@@ -70,7 +70,7 @@ class provider implements
      * @param   int $userid The user to search.
      * @return  contextlist $contextlist The contextlist containing the list of contexts used in this plugin.
      */
-    public static function get_contexts_for_userid($userid) {
+    public static function get_contexts_for_userid($userid) : contextlist {
         $contextlist = new contextlist();
 
         // Find the reports created by the userid.
