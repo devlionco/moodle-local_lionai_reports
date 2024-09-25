@@ -50,8 +50,7 @@
         <div class="col-md-8">
 
             <div class="row container mt-3">
-                {{!-- TODO: add str --}}
-                <label for="id_userprompt">Add prompt:</label>
+                <label for="id_userprompt">{{#str}}addprompt, local_lionai_reports{{/str}}</label>
                 <textarea id="id_userprompt" class="form-control userprompt-textarea"
                     rows="5">{{lastusercontent}}</textarea>
             </div>
@@ -102,7 +101,6 @@
                 </div>
                 {{/actions}}
 
-                {{!-- TODO: add title str --}}
                 <div id="ratebtns-wrapper" class="mx-auto">
                     <button type="button" class="btn btn-outline-success mr-1" id="thmbup" role="button"
                         title="{{#str}}thumbupbtn, local_lionai_reports{{/str}}" data-rate="1"
