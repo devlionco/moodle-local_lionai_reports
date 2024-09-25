@@ -32,8 +32,6 @@ import ModalEvents from 'core/modal_events';
 import {get_string as getString} from 'core/str';
 import * as CodeMirror from "./codemirror";
 
-// import "https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/mode/sql/sql.min.js";
-
 const dataTemp = {
     report: null,
     table: null,
@@ -133,20 +131,9 @@ const renderReport = () => {
             );
 
             initTargets();
-            // TODO: Is it needed?
-            // const changeActualSql = () => {
-            //   dataTemp.actualsql = Selectors.targets.querysqlElem.value;
-            //   if (dataTemp.sqlOriginal != actualsql) {
-            //     originalDataChanged();
-            //   }
-            // }
 
             dataTemp.editor = CodeMirror.editorFromTextArea(Selectors.targets.querysqlElem);
-            // TODO: Is it needed?
-            // let virtualButtonClick = () => {
-            //   const button = document.getElementById("id_submitbutton");
-            //   button.click();
-            // };
+
             Selectors.targets.thmbup.onclick = (e) =>
                 ratePrompt(e.currentTarget.dataset.promptid, e.currentTarget.dataset.rate, e.currentTarget);
 
@@ -192,19 +179,6 @@ const renderReport = () => {
                 }
             });
 
-            // TODO: Is it needed?
-            // let timeoutId;
-            // Variable to store the timeout ID for debouncing
-
-            // // TODO: Remove?
-            // const handleQueryInputChange = () => {
-            //   clearTimeout(timeoutId);
-            //   const inputValue = Selectors.targets.querysqlElem.value;
-            //   timeoutId = setTimeout(() => {
-            //     getResult(inputValue);
-            //   }, 500);
-            // };
-
             const dropdownItems = document.querySelectorAll(
                 ".lionai_reports-examples-list .dropdown-item"
             );
@@ -243,16 +217,7 @@ const renderReport = () => {
                     document.getElementById("edit-name").textContent = "";
                     document.getElementById("edit-name").appendChild(inputField);
 
-                    // TODO: Discard by Focusout
-                    // inputField.addEventListener("blur", async function (event) {
-                    //   return;
-                    // });
-
                     inputField.addEventListener("keydown", async function(event) {
-                        // TODO: Discard by Escape
-                        // if (event.key === "Escape") {
-                        //   return;
-                        // }
                         if (event.key === "Enter") {
                             var newName = inputField.value;
                             document.getElementById("edit-name").textContent = newName;
@@ -315,7 +280,6 @@ let setqueryresultid = (data) => {
         });
     } else {
         // Handle the case where data is empty or has no keys.
-        // setMessage("Data set is empty or has no keys.");
     }
 };
 
@@ -338,10 +302,6 @@ let setPreviewMessage = async function(count) {
     previewMessageHtml = previewMessageHtml +  '<span class="text-muted">' + previewNote2 + '</span>';
     previewWrapper.innerHTML = previewMessageHtml;
 };
-
-// TODO: Is it needed?
-// let cm;
-// let reportid;
 
 /**
  * Sets the SQL value in the query SQL element and triggers a result retrieval.
@@ -452,16 +412,6 @@ const setTargetText = (newText/* , autoSave = false */) => {
         "id_querysql",
         "id_senduserprompt",
     ]);
-
-    // Some delay to render sql with codemirror. Rework to callback.
-    // setTimeout(function () {
-    //   hidespinneroverlay();
-
-    //   // TODO: autosave
-    //   // if (autoSave) {
-    //   //   virtualButtonClick();
-    //   // }
-    // }, 500);
 };
 
 /**
