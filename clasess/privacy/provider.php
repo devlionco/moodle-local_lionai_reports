@@ -28,6 +28,8 @@ use core_privacy\local\metadata\collection;
 use core_privacy\local\request\approved_contextlist;
 use core_privacy\local\request\approved_userlist;
 use core_privacy\local\request\contextlist;
+use core_privacy\local\request\core_user_data_provider;
+use core_privacy\local\request\core_userlist_provider;
 use core_privacy\local\request\userlist;
 use core_privacy\local\request\transform;
 use core_privacy\local\request\writer;
@@ -40,13 +42,10 @@ class provider implements
     \core_privacy\local\metadata\provider,
 
     // This plugin is capable of determining which users have data within it.
-    \core_privacy\local\request\core_userlist_provider,
+    core_userlist_provider,
 
     // This plugin currently implements the original plugin\provider interface.
-    \core_privacy\local\request\plugin\provider {
-
-    // This trait must be included to provide the relevant polyfill for the metadata provider.
-    use \core_privacy\local\legacy_polyfill;
+    core_user_data_provider {
 
     /**
      * Returns meta data about this plugin.
@@ -133,7 +132,7 @@ class provider implements
                     'fullname' => format_string($result->fullname, true),
                     'userid' => $result->userid,
                     'reportname' => $result->name,
-                    'histoty' => $result->options,
+                    'history' => $result->options,
                     'timecreated' => transform::datetime($result->timecreated),
                     'timemodified' => transform::datetime($result->timemodified),
             ];
