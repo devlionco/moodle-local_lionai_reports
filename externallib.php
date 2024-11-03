@@ -24,11 +24,12 @@
  * @since      Moodle 4.1
  */
 
+use local_lionai_reports\lionai_reports_api;
+
 defined('MOODLE_INTERNAL') || die;
 
 require_once($CFG->libdir . '/externallib.php');
 require_once($CFG->dirroot . '/local/lionai_reports/locallib.php');
-require_once($CFG->dirroot . '/local/lionai_reports/classes/lionai_reports_api.php');
 
 /**
  * External tool module external functions
@@ -307,13 +308,15 @@ class local_lionai_reports_external extends external_api {
 
         $key = get_config('local_lionai_reports', 'lionai_reports_apikey');
         $url = get_config('local_lionai_reports', 'lionai_reports_apiurl');
-        $lionaireports = new local_lionai_reports\lionai_reports_api($key, $url);
+        $lionaireports = new lionai_reports_api($key, $url);
         $response = $lionaireports->send_prompt($prompt);
 
         // Put response to history.
         $historyitem = new stdClass;
         $historyitem->role = 'assistant';
-        if ($response[0] == 'Client is not eligible.' && $response[1] == 0) {
+        $pattern = '/not eligible/i'; // The 'i' flag makes the search case-insensitive
+
+        if (preg_match($pattern,$response[0]) && $response[1] == 0) {
             $response[0] = get_string('not_eligible_message', 'local_lionai_reports');
         }
         $historyitem->content = $response[0];
@@ -383,7 +386,7 @@ class local_lionai_reports_external extends external_api {
 
         $key = get_config('local_lionai_reports', 'lionai_reports_apikey');
         $url = get_config('local_lionai_reports', 'lionai_reports_apiurl');
-        $lionaireports = new local_lionai_reports\lionai_reports_api($key, $url);
+        $lionaireports = new lionai_reports_api($key, $url);
         $response = $lionaireports->rate_prompt($promptid, $rate);
 
         return [
