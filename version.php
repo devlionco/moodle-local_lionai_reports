@@ -25,7 +25,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'local_lionai_reports';
-$plugin->release = '1.0.6';
-$plugin->version = 2024092600;
+$plugin->release = '1.0.6.1';
+$plugin->version = 2024092601;
 $plugin->requires = 2020061500;
 $plugin->maturity = MATURITY_STABLE;
