@@ -86,6 +86,7 @@ if ($id !== 0) {
 }
 
 $PAGE->requires->css('/local/lionai_reports/css/datatables.css');
+$PAGE->requires->css('/local/lionai_reports/css/codemirror.css');
 
 $PAGE->set_url('/local/lionai_reports/index.php', ['id' => $id]);
 

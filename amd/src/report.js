@@ -132,7 +132,10 @@ const renderReport = () => {
 
             initTargets();
 
-            dataTemp.editor = CodeMirror.editorFromTextArea(Selectors.targets.querysqlElem);
+            dataTemp.editor = CodeMirror.fromTextArea(Selectors.targets.querysqlElem, {
+                lineNumbers: true,
+                theme: "darcula",
+            });
 
             Selectors.targets.thmbup.onclick = (e) =>
                 ratePrompt(e.currentTarget.dataset.promptid, e.currentTarget.dataset.rate, e.currentTarget);
@@ -318,7 +321,10 @@ const setSql = (sql) => {
         });
     }
 
-    dataTemp.editor = CodeMirror.editorFromTextArea(Selectors.targets.querysqlElem);
+    dataTemp.editor = CodeMirror.fromTextArea(Selectors.targets.querysqlElem, {
+        lineNumbers: true,
+        theme: "darcula",
+    });
     getResult(sql);
 };
 
@@ -340,7 +346,10 @@ const showModal = async() => {
         if (textarea.length > 0) {
             textarea.forEach(el => {
                 if (el.textLength > 0) {
-                    CodeMirror.editorFromTextArea(el);
+                    CodeMirror.fromTextArea(el, {
+                        lineNumbers: true,
+                        theme: "darcula",
+                    });
                 }
             });
         }
@@ -492,7 +501,10 @@ const sendPrompt = (prompt) => {
                             el.remove();
                         });
                     }
-                    dataTemp.editor = CodeMirror.editorFromTextArea(Selectors.targets.querysqlElem);
+                    dataTemp.editor = CodeMirror.fromTextArea(Selectors.targets.querysqlElem, {
+                        lineNumbers: true,
+                        theme: "darcula",
+                    });
                     return;
                 }
                 dataTemp.sqlOriginal = message;
