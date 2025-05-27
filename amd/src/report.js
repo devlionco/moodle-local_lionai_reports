@@ -1,3 +1,18 @@
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
 /**
  * Connect lionai_reports functionality.
  *
@@ -46,6 +61,7 @@ const Selectors = {
     },
     targets: {}
 };
+
 
 /**
  * Retrieves a report by its ID using an AJAX call.
@@ -127,6 +143,7 @@ const renderReport = () => {
             Selectors.targets.thmbdown.onclick = (e) =>
                 ratePrompt(e.currentTarget.dataset.promptid, e.currentTarget.dataset.rate, e.currentTarget);
 
+
             Selectors.targets.senduserpromptButton.addEventListener("click", () => {
                 sendPrompt(Selectors.targets.promptElem.value);
             });
@@ -148,6 +165,7 @@ const renderReport = () => {
 
                 sendPrompt(value);
             });
+
 
             Selectors.targets.querysqlElem.addEventListener("change", () => {
                 let actualsql = Selectors.targets.querysqlElem.value;
@@ -182,6 +200,7 @@ const renderReport = () => {
             /**
              * Hides the "Try to Fix It" element by adding the "d-none" class.
              */
+
             hideElement(Selectors.targets.queryresultmessage);
             hideElement(Selectors.targets.trytofixlElem);
             hideElement(Selectors.targets.ratebtnswrapper);
@@ -196,7 +215,7 @@ const renderReport = () => {
                     var inputField = document.createElement("input");
                     inputField.type = "text";
                     inputField.value = currentName;
-                    inputField.classList.add("w-100");
+                    inputField.classList.add("w-100"); // Add the 'w-100' class
 
                     document.getElementById("edit-name").textContent = "";
                     document.getElementById("edit-name").appendChild(inputField);
@@ -228,6 +247,7 @@ const renderReport = () => {
         })
         .catch((error) => Notification.displayException(error));
 };
+
 
 /**
  * Sets the query result data in a DataTable for display.
@@ -261,13 +281,14 @@ let setqueryresultid = (data) => {
             scrollX: true,
             autoWidth: true
         });
+    } else {
+        // Handle the case where data is empty or has no keys.
     }
 };
 
 /**
  * Sets the query result data amount into the preview message and display it.
  *
- // eslint-disable-next-line valid-jsdoc
  * @param count - the number of results from the query.
  */
 let setPreviewMessage = async function(count) {
@@ -291,13 +312,8 @@ let setPreviewMessage = async function(count) {
  * @param {string} sql - The SQL string to set in the query SQL element.
  */
 const setSql = (sql) => {
+
     Selectors.targets.querysqlElem.value = sql;
-
-    if (dataTemp.editor) {
-        dataTemp.editor.toTextArea();
-        dataTemp.editor = null;
-    }
-
     let sqlEditors = Selectors.targets.querysqlElem.parentElement.querySelectorAll('.cm-editor');
     if (sqlEditors.length > 0) {
         sqlEditors.forEach((el) => {
@@ -309,7 +325,6 @@ const setSql = (sql) => {
         lineNumbers: true,
         theme: "darcula",
     });
-
     getResult(sql);
 };
 
@@ -340,6 +355,7 @@ const showModal = async() => {
         }
         renderHistory();
     });
+
 };
 
 /**
@@ -348,6 +364,7 @@ const showModal = async() => {
 const hideModal = () => {
     Selectors.targets.createdModal.destroy();
 };
+
 
 const hideElement = (target) => {
     target.classList.add("d-none");
@@ -363,6 +380,9 @@ const showElement = (target) => {
  * @param {string} query - The SQL query to execute and retrieve results for.
  */
 const getResult = (query) => {
+    /**
+     * Hides the alert message element by adding the "d-none" class.
+     */
     hideElement(Selectors.targets.queryresultmessage);
     hideElement(Selectors.targets.trytofixlElem);
     Ajax.call([
@@ -393,7 +413,7 @@ const getResult = (query) => {
  *
  * @param {string} newText - The new text to set.
  */
-const setTargetText = (newText) => {
+const setTargetText = (newText/* , autoSave = false */) => {
     setSql(newText);
 
     spinneroverlay.hidespinneroverlay([
@@ -412,13 +432,20 @@ const setTargetText = (newText) => {
 const setMessage = (value, correct = 2) => {
     if (value.length > 0) {
         document.getElementById(Selectors.elements.queryresultmessage).innerHTML = value;
+        /**
+         * Shows the alert message element by removing the "d-none" class.
+         */
         showElement(Selectors.targets.queryresultmessage);
     }
 
     if (correct == 1) {
+        /**
+         * Shows the "Try to Fix It" element by removing the "d-none" class.
+         */
         showElement(Selectors.targets.trytofixlElem);
     }
 };
+
 
 const originalDataChanged = () => {
     if (!dataTemp.sqlChanged) {
@@ -426,6 +453,7 @@ const originalDataChanged = () => {
         hideElement(Selectors.targets.ratebtnswrapper);
     }
 };
+
 
 /**
  * Sends a user prompt via an AJAX call and updates the target text based on the response.
@@ -453,52 +481,48 @@ const sendPrompt = (prompt) => {
                 conversationid: dataTemp.report.conversationid,
             },
             done: function(data) {
-                let message = data.message;
-                let correct = data.correct;
-                let autoSave = true;
+                const message = data.message;
+                const correct = data.correct;
+                const autoSave = true;
+
+                spinneroverlay.hidespinneroverlay([
+                    "id_userprompt",
+                    "id_querysql",
+                    "id_senduserprompt",
+                ]);
+
+                if (dataTemp.editor) {
+                    dataTemp.editor.toTextArea();
+                    dataTemp.editor = null;
+                }
+
+                Selectors.targets.querysqlElem.value = message;
+
+                const sqlEditors = Selectors.targets.querysqlElem.parentElement.querySelectorAll('.cm-editor');
+                sqlEditors.forEach((el) => el.remove());
+
+                dataTemp.editor = CodeMirror.fromTextArea(Selectors.targets.querysqlElem, {
+                    lineNumbers: true,
+                    theme: "darcula",
+                    readOnly: correct != 2 ? false : true,
+                    mode: "text/x-sql"
+                });
+
                 if (correct != 2) {
-                    setMessage(
-                        "Does not look like correct code. Use carefully.",
-                        correct
-                    );
-                    spinneroverlay.hidespinneroverlay([
-                        "id_userprompt",
-                        "id_querysql",
-                        "id_senduserprompt",
-                    ]);
-                    Selectors.targets.querysqlElem.value = message;
-
-                    if (dataTemp.editor) {
-                        dataTemp.editor.toTextArea();
-                        dataTemp.editor = null;
-                    }
-
-                    let sqlEditors = Selectors.targets.querysqlElem.parentElement.querySelectorAll('.cm-editor');
-                    if (sqlEditors.length > 0) {
-                        sqlEditors.forEach((el) => {
-                            el.remove();
-                        });
-                    }
-
-                    dataTemp.editor = CodeMirror.fromTextArea(Selectors.targets.querysqlElem, {
-                        lineNumbers: true,
-                        theme: "darcula",
-                    });
+                    setMessage("Does not look like correct code. Use carefully.", correct);
                     return;
                 }
+
                 dataTemp.sqlOriginal = message;
                 dataTemp.sqlChanged = false;
 
-                // Show rate btns.
                 clearRateBtnsActiveClass();
                 showElement(Selectors.targets.ratebtnswrapper);
 
-                // Show action buttons.
-                var actionbuttons = document.getElementsByClassName("action-btns")[0];
+                const actionbuttons = document.getElementsByClassName("action-btns")[0];
                 actionbuttons.classList.remove("d-none");
                 actionbuttons.classList.add("d-flex");
 
-                // Set prompt id from response to rate btns.
                 setPromptidToBtns(data.promptid);
 
                 setTargetText(message, autoSave);
@@ -514,6 +538,7 @@ const sendPrompt = (prompt) => {
         },
     ]);
 };
+
 
 /**
  * Sets the user prompt value in the prompt element.
@@ -554,8 +579,8 @@ const renderHistory = () => {
 /**
  * Rate last sent prompt.
  *
- * @param {number} promptid - prompt id.
- * @param {number} rate - prompt rate.
+ * @param {number} promptid - prompr id.
+ * @param {number} rate - prompr rate.
  * @param {object} target - target element.
  */
 const ratePrompt = (promptid, rate, target) => {
@@ -587,7 +612,6 @@ const clearRateBtnsActiveClass = () => {
     Selectors.targets.thmbup.classList.remove("active");
     Selectors.targets.thmbdown.classList.remove("active");
 };
-
 /**
  * Initializes and renders a report with the given report ID.
  *
@@ -597,6 +621,5 @@ const clearRateBtnsActiveClass = () => {
 export const init = async(_reportid) => {
     const response = await getReport(_reportid);
     dataTemp.report = JSON.parse(response.data).report;
-
     renderReport();
 };
