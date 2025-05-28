@@ -62,7 +62,6 @@ const Selectors = {
     targets: {}
 };
 
-
 /**
  * Retrieves a report by its ID using an AJAX call.
  *
@@ -132,6 +131,13 @@ const renderReport = () => {
 
             initTargets();
 
+            // Удаляем старый редактор, если он был
+            if (dataTemp.editor) {
+                dataTemp.editor.toTextArea();
+                dataTemp.editor = null;
+            }
+
+            // Создаём новый редактор
             dataTemp.editor = CodeMirror.fromTextArea(Selectors.targets.querysqlElem, {
                 lineNumbers: true,
                 theme: "darcula",
@@ -143,33 +149,24 @@ const renderReport = () => {
             Selectors.targets.thmbdown.onclick = (e) =>
                 ratePrompt(e.currentTarget.dataset.promptid, e.currentTarget.dataset.rate, e.currentTarget);
 
-
             Selectors.targets.senduserpromptButton.addEventListener("click", () => {
                 sendPrompt(Selectors.targets.promptElem.value);
             });
 
             Selectors.targets.getresultButton.addEventListener("click", () => {
-                getResult(Selectors.targets.querysqlElem.value);
+                getResult(dataTemp.editor.getValue());
             });
 
             Selectors.targets.trytofixlElem.addEventListener("click", () => {
-                let value = "";
                 let trytofixprompt = "try to fix this sql:\n\n";
-                value += trytofixprompt;
+                let actualsql = dataTemp.editor.getValue();
+                let textContent = Selectors.targets.queryresultmessage.textContent;
 
-                let actualsql = Selectors.targets.querysqlElem.value;
-                actualsql += "\n\n";
-                value += actualsql;
-                const textContent = Selectors.targets.queryresultmessage.textContent;
-                value += textContent;
-
-                sendPrompt(value);
+                sendPrompt(`${trytofixprompt}${actualsql}\n\n${textContent}`);
             });
 
-
-            Selectors.targets.querysqlElem.addEventListener("change", () => {
-                let actualsql = Selectors.targets.querysqlElem.value;
-                if (dataTemp.sqlOriginal != actualsql) {
+            dataTemp.editor.on("change", () => {
+                if (dataTemp.sqlOriginal !== dataTemp.editor.getValue()) {
                     originalDataChanged();
                 }
             });
@@ -189,7 +186,6 @@ const renderReport = () => {
             dropdownItems.forEach((item) => {
                 item.addEventListener("click", (event) => {
                     event.preventDefault();
-
                     let value = item.textContent.trim();
                     setUserPrompt(value);
                     sendPrompt(value);
@@ -197,10 +193,6 @@ const renderReport = () => {
             });
 
             spinneroverlay.hidespinneroverlay();
-            /**
-             * Hides the "Try to Fix It" element by adding the "d-none" class.
-             */
-
             hideElement(Selectors.targets.queryresultmessage);
             hideElement(Selectors.targets.trytofixlElem);
             hideElement(Selectors.targets.ratebtnswrapper);
@@ -215,7 +207,7 @@ const renderReport = () => {
                     var inputField = document.createElement("input");
                     inputField.type = "text";
                     inputField.value = currentName;
-                    inputField.classList.add("w-100"); // Add the 'w-100' class
+                    inputField.classList.add("w-100");
 
                     document.getElementById("edit-name").textContent = "";
                     document.getElementById("edit-name").appendChild(inputField);
@@ -227,9 +219,11 @@ const renderReport = () => {
                             document
                                 .getElementById("edit-name-button")
                                 .classList.remove("d-none");
+
                             const updateResult = await updateReport(dataTemp.report.id, "update", {
                                 name: newName,
                             });
+
                             if (updateResult) {
                                 const response = await getReport(dataTemp.report.id);
                                 dataTemp.report = JSON.parse(response.data).report;
@@ -240,10 +234,10 @@ const renderReport = () => {
 
                     inputField.focus();
                 });
+
             document.getElementById('lionai_reportshistory').onclick = () => {
                 showModal();
             };
-            return;
         })
         .catch((error) => Notification.displayException(error));
 };
@@ -312,19 +306,22 @@ let setPreviewMessage = async function(count) {
  * @param {string} sql - The SQL string to set in the query SQL element.
  */
 const setSql = (sql) => {
-
     Selectors.targets.querysqlElem.value = sql;
-    let sqlEditors = Selectors.targets.querysqlElem.parentElement.querySelectorAll('.cm-editor');
-    if (sqlEditors.length > 0) {
+
+    if (dataTemp.editor) {
+        dataTemp.editor.setValue(sql);
+    } else {
+        let sqlEditors = Selectors.targets.querysqlElem.parentElement.querySelectorAll('.cm-editor');
         sqlEditors.forEach((el) => {
             el.remove();
         });
+
+        dataTemp.editor = CodeMirror.fromTextArea(Selectors.targets.querysqlElem, {
+            lineNumbers: true,
+            theme: "darcula",
+        });
     }
 
-    dataTemp.editor = CodeMirror.fromTextArea(Selectors.targets.querysqlElem, {
-        lineNumbers: true,
-        theme: "darcula",
-    });
     getResult(sql);
 };
 
@@ -475,8 +472,7 @@ const sendPrompt = (prompt) => {
     hideElement(Selectors.targets.queryresultmessage);
     hideElement(Selectors.targets.trytofixlElem);
     hideElement(Selectors.targets.ratebtnswrapper);
-console.log(dataTemp);
-console.log(dataTemp.report.id);
+
     Ajax.call([
         {
             methodname: "local_lionai_reports_send_prompt",
@@ -487,9 +483,9 @@ console.log(dataTemp.report.id);
                 conversationid: dataTemp.report.conversationid,
             },
             done: function(data) {
-                let message = data.message;
-                let correct = data.correct;
-                let autoSave = true;
+                const message = data.message;
+                const correct = data.correct;
+                const autoSave = true;
 
                 spinneroverlay.hidespinneroverlay([
                     "id_userprompt",
@@ -497,30 +493,10 @@ console.log(dataTemp.report.id);
                     "id_senduserprompt",
                 ]);
 
-                Selectors.targets.querysqlElem.value = message;
-
-                if (!dataTemp.editor) {
-                    dataTemp.editor = CodeMirror.fromTextArea(Selectors.targets.querysqlElem, {
-                        lineNumbers: true,
-                        theme: "darcula",
-                    });
-                } else {
-                    dataTemp.editor.setValue(message);
-                }
-
-                const currentEditor = dataTemp.editor.getWrapperElement();
-                const editors = Selectors.targets.querysqlElem.parentElement.querySelectorAll('.CodeMirror');
-                editors.forEach((editorElem) => {
-                    if (editorElem !== currentEditor) {
-                        editorElem.remove();
-                    }
-                });
+                dataTemp.editor.setValue(message);
 
                 if (correct != 2) {
-                    setMessage(
-                        "Does not look like correct code. Use carefully.",
-                        correct
-                    );
+                    setMessage("Does not look like correct code. Use carefully.", correct);
                     dataTemp.isSending = false;
                     return;
                 }
@@ -537,6 +513,7 @@ console.log(dataTemp.report.id);
 
                 setPromptidToBtns(data.promptid);
                 setTargetText(message, autoSave);
+
                 dataTemp.isSending = false;
             },
             fail: function(error) {
@@ -630,8 +607,7 @@ const clearRateBtnsActiveClass = () => {
  * @param {number} _reportid - The unique identifier of the report to initialize and render.
  * @throws {Error} If an error occurs during report retrieval, parsing, or rendering.
  */
-export const init = async(_reportid) => {
-
+export const init = async (_reportid) => {
     const response = await getReport(_reportid);
     dataTemp.report = JSON.parse(response.data).report;
 
