@@ -475,7 +475,8 @@ const sendPrompt = (prompt) => {
     hideElement(Selectors.targets.queryresultmessage);
     hideElement(Selectors.targets.trytofixlElem);
     hideElement(Selectors.targets.ratebtnswrapper);
-
+console.log(dataTemp);
+console.log(dataTemp.report.id);
     Ajax.call([
         {
             methodname: "local_lionai_reports_send_prompt",
@@ -503,12 +504,15 @@ const sendPrompt = (prompt) => {
                         lineNumbers: true,
                         theme: "darcula",
                     });
+                } else {
+                    dataTemp.editor.setValue(message);
                 }
-                dataTemp.editor.setValue(message);
-                let sqlEditors = Selectors.targets.querysqlElem.parentElement.querySelectorAll('.cm-editor');
-                sqlEditors.forEach((el) => {
-                    if (el !== dataTemp.editor.getWrapperElement()) {
-                        el.remove();
+
+                const currentEditor = dataTemp.editor.getWrapperElement();
+                const editors = Selectors.targets.querysqlElem.parentElement.querySelectorAll('.CodeMirror');
+                editors.forEach((editorElem) => {
+                    if (editorElem !== currentEditor) {
+                        editorElem.remove();
                     }
                 });
 
@@ -524,21 +528,17 @@ const sendPrompt = (prompt) => {
                 dataTemp.sqlOriginal = message;
                 dataTemp.sqlChanged = false;
 
-                // Show rate btns
                 clearRateBtnsActiveClass();
                 showElement(Selectors.targets.ratebtnswrapper);
 
-                // Show action buttons
-                var actionbuttons = document.getElementsByClassName("action-btns")[0];
+                const actionbuttons = document.getElementsByClassName("action-btns")[0];
                 actionbuttons.classList.remove("d-none");
                 actionbuttons.classList.add("d-flex");
 
-                // Set prompt id from response to rate btns
                 setPromptidToBtns(data.promptid);
-
                 setTargetText(message, autoSave);
                 dataTemp.isSending = false;
-                },
+            },
             fail: function(error) {
                 Notification.exception(error);
                 spinneroverlay.hidespinneroverlay([
