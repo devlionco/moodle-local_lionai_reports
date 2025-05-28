@@ -461,6 +461,11 @@ const originalDataChanged = () => {
  * @param {string} prompt - The user prompt to send.
  */
 const sendPrompt = (prompt) => {
+    if (dataTemp.isSending) {
+        return;
+    }
+    dataTemp.isSending = true;
+
     spinneroverlay.showspinneroverlay([
         "id_userprompt",
         "id_querysql",
@@ -481,9 +486,9 @@ const sendPrompt = (prompt) => {
                 conversationid: dataTemp.report.conversationid,
             },
             done: function(data) {
-                const message = data.message;
-                const correct = data.correct;
-                const autoSave = true;
+                let message = data.message;
+                let correct = data.correct;
+                let autoSave = true;
 
                 spinneroverlay.hidespinneroverlay([
                     "id_userprompt",
@@ -491,42 +496,49 @@ const sendPrompt = (prompt) => {
                     "id_senduserprompt",
                 ]);
 
-                if (dataTemp.editor) {
-                    dataTemp.editor.toTextArea();
-                    dataTemp.editor = null;
-                }
-
                 Selectors.targets.querysqlElem.value = message;
 
-                const sqlEditors = Selectors.targets.querysqlElem.parentElement.querySelectorAll('.cm-editor');
-                sqlEditors.forEach((el) => el.remove());
-
-                dataTemp.editor = CodeMirror.fromTextArea(Selectors.targets.querysqlElem, {
-                    lineNumbers: true,
-                    theme: "darcula",
-                    readOnly: correct != 2 ? false : true,
-                    mode: "text/x-sql"
+                if (!dataTemp.editor) {
+                    dataTemp.editor = CodeMirror.fromTextArea(Selectors.targets.querysqlElem, {
+                        lineNumbers: true,
+                        theme: "darcula",
+                    });
+                }
+                dataTemp.editor.setValue(message);
+                let sqlEditors = Selectors.targets.querysqlElem.parentElement.querySelectorAll('.cm-editor');
+                sqlEditors.forEach((el) => {
+                    if (el !== dataTemp.editor.getWrapperElement()) {
+                        el.remove();
+                    }
                 });
 
                 if (correct != 2) {
-                    setMessage("Does not look like correct code. Use carefully.", correct);
+                    setMessage(
+                        "Does not look like correct code. Use carefully.",
+                        correct
+                    );
+                    dataTemp.isSending = false;
                     return;
                 }
 
                 dataTemp.sqlOriginal = message;
                 dataTemp.sqlChanged = false;
 
+                // Show rate btns
                 clearRateBtnsActiveClass();
                 showElement(Selectors.targets.ratebtnswrapper);
 
-                const actionbuttons = document.getElementsByClassName("action-btns")[0];
+                // Show action buttons
+                var actionbuttons = document.getElementsByClassName("action-btns")[0];
                 actionbuttons.classList.remove("d-none");
                 actionbuttons.classList.add("d-flex");
 
+                // Set prompt id from response to rate btns
                 setPromptidToBtns(data.promptid);
 
                 setTargetText(message, autoSave);
-            },
+                dataTemp.isSending = false;
+                },
             fail: function(error) {
                 Notification.exception(error);
                 spinneroverlay.hidespinneroverlay([
@@ -534,11 +546,11 @@ const sendPrompt = (prompt) => {
                     "id_querysql",
                     "id_senduserprompt",
                 ]);
+                dataTemp.isSending = false;
             },
         },
     ]);
 };
-
 
 /**
  * Sets the user prompt value in the prompt element.
@@ -619,7 +631,9 @@ const clearRateBtnsActiveClass = () => {
  * @throws {Error} If an error occurs during report retrieval, parsing, or rendering.
  */
 export const init = async(_reportid) => {
+
     const response = await getReport(_reportid);
     dataTemp.report = JSON.parse(response.data).report;
+
     renderReport();
 };
