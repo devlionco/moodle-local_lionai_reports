@@ -286,7 +286,7 @@ let setqueryresultid = (data) => {
 /**
  * Sets the query result data amount into the preview message and display it.
  *
- * @param count - the number of results from the query.
+ * @param {number} count - the number of results from the query.
  */
 let setPreviewMessage = async function(count) {
     document.getElementById(Selectors.elements.previewwrapper).innerHTML = "";
@@ -326,6 +326,8 @@ const setSql = (sql) => {
  * Shows the history modal by hiding it.
  */
 const showModal = async() => {
+       const response = await getReport(dataTemp.report.id);
+                                dataTemp.report = JSON.parse(response.data).report;
     const modal = await ModalFactory.create({
         title: getString('pickfromhistory', 'local_lionai_reports'),
         large: true,
