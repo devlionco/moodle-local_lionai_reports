@@ -41,7 +41,10 @@ $string['example2'] = 'Show all unique quiz  in all courses , quiz name and cour
 $string['example3'] = 'Give me users whose first names contain the letter A and emails contain the digit 2';
 $string['example4'] = 'Show all questions with type essay, that have unique name';
 $string['example5'] = 'Get version from config of the plugin mod_quiz';
-$string['trytofix'] = 'Try to fix';
+$string['trytofix'] = 'Try to fix the query';
+$string['trytofixtooltip'] = 'Attempts to automatically fix errors in the query.
+                              If no results are returned, try adjusting the prompt.
+                              We recommend using the example template to improve accuracy.';
 $string['ctrlenter'] = 'You could use CTRL+Enter';
 $string['creator'] = 'Creator';
 $string['lastmessages'] = 'Last messages';
