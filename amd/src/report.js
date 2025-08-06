@@ -57,7 +57,8 @@ const Selectors = {
         thmbup: "thmbup",
         thmbdown: "thmbdown",
         ratebtnswrapper: "ratebtns-wrapper",
-        previewwrapper: "previewwrapper"
+        previewwrapper: "previewwrapper",
+        insertTemplate: "insertTemplate"
     },
     targets: {}
 };
@@ -115,6 +116,7 @@ const initTargets = () => {
     Selectors.targets.getresultButton = document.getElementById(Selectors.elements.getresultid);
     Selectors.targets.errorDiv = document.getElementById(Selectors.elements.errordivid);
     Selectors.targets.lionaiReportshistory = document.getElementById(Selectors.elements.lionai_reportshistory);
+    Selectors.targets.insertTemplateButton = document.getElementById(Selectors.elements.insertTemplate);
 };
 
 /**
@@ -176,6 +178,14 @@ const renderReport = () => {
                     sendPrompt(Selectors.targets.promptElem.value);
                 } else {
                     hideElement(Selectors.targets.ratebtnswrapper);
+                }
+            });
+
+            Selectors.targets.insertTemplateButton.addEventListener("click", () => {
+                const templateValue = Selectors.targets.insertTemplateButton.getAttribute('data-template');
+                if (templateValue && Selectors.targets.promptElem) {
+                    Selectors.targets.promptElem.value = templateValue;
+                    Selectors.targets.promptElem.focus();
                 }
             });
 

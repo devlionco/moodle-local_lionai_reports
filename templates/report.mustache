@@ -62,7 +62,7 @@ Example context (json):
                 </button>
 
                 {{#lastusercontent}}
-                <button type="button" class="btn btn-secondary lionai_reports-history ml-1" data-toggle="modal"
+                <button type="button" class="btn btn-secondary lionai_reports-history ml-3" data-toggle="modal"
                     data-target="#historyModal" id="lionai_reportshistory" role="button">
                     {{#str}}pickfromhistory, local_lionai_reports{{/str}}
                 </button>
@@ -70,7 +70,7 @@ Example context (json):
 
                 {{#actions}}
 
-                <div class="{{is_new}} align-items-center ml-auto mr-auto action-btns">
+                <div class="{{is_new}} align-items-center action-btns mx-auto">
                     {{#exportcrautoactionurl}}
 
                     <form action="{{{exportcrautoactionurl}}}" target="_blank" method="post" class="m-0 mr-2">
@@ -120,7 +120,12 @@ Example context (json):
                     </button>
                 </div>
 
-                <div class="dropdown ml-auto">
+                <button type="button" class="btn btn-outline-info mx-3" id="insertTemplate"
+                data-template="{{#str}}promptptemplate, local_lionai_reports{{/str}}">
+                    {{#str}}insertprompttemplate, local_lionai_reports{{/str}}
+                </button>
+
+                <div class="dropdown">
                     <a class="btn btn-outline-info dropdown-toggle lionai_reports-examples" href="#" role="button"
                         data-toggle="dropdown" aria-expanded="false">
                         {{#str}}examples, local_lionai_reports{{/str}}
