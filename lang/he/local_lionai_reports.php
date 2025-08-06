@@ -59,6 +59,8 @@ $string['exportsqlwarning'] = 'ייצא כקובץ SQL (.sql)';
 $string['exportsql'] = 'ייצא קובץ SQL';
 $string['exportcsvwarning'] = 'ייצא תוצאות הדוח בפורמט CSV';
 $string['exportcsv'] = 'ייצא קובץ CSV';
+$string['exportexcelwarning'] = 'ייצא תוצאות הדוח בפורמט XLS';
+$string['exportexcel'] = 'ייצא קובץ XLS';
 $string['lionai_reports_apikey'] = 'מפתח API';
 $string['lionai_reports_apikeyinfo'] = 'הגרסה החינמית מאפשרת 10 ביצועי בקשות בשבוע. לקבלת גרסת Pro, פנו אלינו בכתובת <a href="mailto:info@devlion.co">info@devlion.co</a>';
 $string['lionai_reports_apiurl'] = 'כתובת API';

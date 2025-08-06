@@ -96,9 +96,13 @@ Example context (json):
                             title="{{#str}} exportsqlwarning, local_lionai_reports{{/str}}"></button>
                     </form>
                     <button onclick="window.open('{{{exportcsvactionurl}}}','_blank')" type="submit"
-                        class="p-2 btn btn-secondary btn-sm" data-toggle="tooltip" data-html="true"
+                        class="m-0 mr-2 p-2 btn btn-secondary btn-sm" data-toggle="tooltip" data-html="true"
                         data-name="exportcsvw" data-placement="left"
                         title="{{#str}} exportcsvwarning, local_lionai_reports{{/str}}"></button>
+                    <button onclick="window.open('{{{exportexcelactionurl}}}','_blank')" type="submit"
+                        class="btn btn-secondary btn-sm" data-toggle="tooltip" data-html="true"
+                        data-name="exportexcelw" data-placement="left"
+                        title="{{#str}} exportexcelwarning, local_lionai_reports{{/str}}"><i class="fas fa-file-excel"></i></button>
                 </div>
                 {{/actions}}
 

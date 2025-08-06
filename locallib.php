@@ -59,8 +59,10 @@ function local_lionai_reports_getlist($userid = 0) {
                 ['id' => $record->id, 'export' => 'confreports']))->out();
         $record->actions->exportsqlactionurl = (new moodle_url('/local/lionai_reports/index.php',
                 ['id' => $record->id, 'export' => 'sqlformat']))->out();
-        $record->actions->exportcsvactionurl = (new moodle_url('/local/lionai_reports/export.php',
-                ['id' => $record->id]))->out();
+    $record->actions->exportcsvactionurl = (new moodle_url('/local/lionai_reports/export.php',
+            ['id' => $record->id, 'filetype' => 'csv']))->out();
+    $record->actions->exportexcelactionurl = (new moodle_url('/local/lionai_reports/export.php',
+                ['id' => $record->id, 'filetype' => 'xls']))->out();
 
         $options = empty($record->options) ? ['history' => null] : json_decode($record->options, true);
 
@@ -102,7 +104,9 @@ function local_lionai_reports_getreport($id = 0) {
     $record->actions->exportsqlactionurl = (new moodle_url('/local/lionai_reports/',
             ['id' => $record->id, 'export' => 'sqlformat']))->out();
     $record->actions->exportcsvactionurl = (new moodle_url('/local/lionai_reports/export.php',
-            ['id' => $record->id]))->out();
+            ['id' => $record->id, 'filetype' => 'csv']))->out();
+    $record->actions->exportexcelactionurl = (new moodle_url('/local/lionai_reports/export.php',
+                ['id' => $record->id, 'filetype' => 'xls']))->out();
 
     $record->actions->is_new = empty($record->options) ? 'd-none' : 'd-flex';
 

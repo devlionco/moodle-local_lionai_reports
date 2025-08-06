@@ -59,6 +59,8 @@ $string['exportsqlwarning'] = 'Export as SQL file format (.sql)';
 $string['exportsql'] = 'Export SQL file';
 $string['exportcsvwarning'] = 'Export report result in CSV format';
 $string['exportcsv'] = 'Export CSV file';
+$string['exportexcelwarning'] = 'Export report result in XLS format';
+$string['exportexcel'] = 'Export XLS file';
 $string['lionai_reports_apikey'] = 'API Key';
 $string['lionai_reports_apikeyinfo'] = 'The free version allows you 10 prompt executions per week. To get the Pro version, contact us at <a href="mailto:info@devlion.co">info@devlion.co</a> ';
 $string['lionai_reports_apiurl'] = 'API URL';
