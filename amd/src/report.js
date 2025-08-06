@@ -282,12 +282,43 @@ let setqueryresultid = (data) => {
         }));
         const dataArray = keys.map((key) => data[key]);
 
-        dataTemp.table = new DataTable(`#${Selectors.elements.queryresultid}`, {
+        // Check if the HTML language is Hebrew
+        const htmlLang = document.documentElement.lang || document.documentElement.getAttribute('lang');
+        const isHebrew = htmlLang && htmlLang.startsWith('he');
+
+        const dataTableConfig = {
             columns: columns,
             data: dataArray,
             scrollX: true,
             autoWidth: true
-        });
+        };
+
+        // Add Hebrew language configuration if HTML lang is Hebrew
+        if (isHebrew) {
+            dataTableConfig.language = {
+                "search": "חיפוש:",
+                "lengthMenu": "הצג _MENU_ רשומות בעמוד",
+                "zeroRecords": "לא נמצאו רשומות מתאימות",
+                "info": "מציג _START_ עד _END_ מתוך _TOTAL_ רשומות",
+                "infoEmpty": "מציג 0 עד 0 מתוך 0 רשומות",
+                "infoFiltered": "(מסונן מתוך _MAX_ רשומות)",
+                "loadingRecords": "טוען...",
+                "processing": "מעבד...",
+                "emptyTable": "אין נתונים זמינים בטבלה",
+                "paginate": {
+                    "first": "ראשון",
+                    "last": "אחרון",
+                    "next": "הבא",
+                    "previous": "הקודם"
+                },
+                "aria": {
+                    "sortAscending": ": לחץ כדי למיין בסדר עולה",
+                    "sortDescending": ": לחץ כדי למיין בסדר יורד"
+                }
+            };
+        }
+
+        dataTemp.table = new DataTable(`#${Selectors.elements.queryresultid}`, dataTableConfig);
     } else {
         // Handle the case where data is empty or has no keys.
     }

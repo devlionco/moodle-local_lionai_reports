@@ -157,11 +157,42 @@
 </div>
 {{#js}}
 require(['local_lionai_reports/jquery.dataTables', 'jquery'], function(DataTable, $) {
-    $('#lionai_reports-table').DataTable({
+    // Check if the HTML language is Hebrew
+    const htmlLang = document.documentElement.lang || document.documentElement.getAttribute('lang');
+    const isHebrew = htmlLang && htmlLang.startsWith('he');
+
+    const dataTableConfig = {
         columnDefs: [{orderable: false, targets: [2, 3]}],
         order: [[6, 'desc']],
         dom: '<"d-flex justify-content-end pb-3"f>t<"pt-3 d-flex justify-content-between align-items-center"lip>'
-        });
+    };
+
+    // Add Hebrew language configuration if HTML lang is Hebrew
+    if (isHebrew) {
+        dataTableConfig.language = {
+            "search": "חיפוש:",
+            "lengthMenu": "הצג _MENU_ רשומות בעמוד",
+            "zeroRecords": "לא נמצאו רשומות מתאימות",
+            "info": "מציג _START_ עד _END_ מתוך _TOTAL_ רשומות",
+            "infoEmpty": "מציג 0 עד 0 מתוך 0 רשומות",
+            "infoFiltered": "(מסונן מתוך _MAX_ רשומות)",
+            "loadingRecords": "טוען...",
+            "processing": "מעבד...",
+            "emptyTable": "אין נתונים זמינים בטבלה",
+            "paginate": {
+                "first": "ראשון",
+                "last": "אחרון",
+                "next": "הבא",
+                "previous": "הקודם"
+            },
+            "aria": {
+                "sortAscending": ": לחץ כדי למיין בסדר עולה",
+                "sortDescending": ": לחץ כדי למיין בסדר יורד"
+            }
+        };
+    }
+
+    $('#lionai_reports-table').DataTable(dataTableConfig);
 });
 require(['core/inplace_editable']);
 {{/js}}
