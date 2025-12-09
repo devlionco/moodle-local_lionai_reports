@@ -163,7 +163,6 @@ class lionai_reports_api {
      */
     private function process_sql_response($response) {
 
-        $response = json_decode($response);
         $this->message = str_replace('\n', "\n", $response->message);
         $this->promptid = $response->promptid;
 
@@ -242,12 +241,31 @@ class lionai_reports_api {
         require_once($CFG->libdir.'/filelib.php');
 
         $ch = new \curl();
-        $response = $ch->post($this->url, $data);
+        $response = null;
+
+        // Determine if using new API
+        $isNewApi = !(strpos($this->key, 'LionAI') !== false);
+
+        if($isNewApi) {
+            $headers = [
+                'x-api-key: ' . $data['token'],
+            ];
+            $ch->setHeader($headers);
+
+            $response = $ch->post($this->url, json_encode($data));
+            $response = json_decode($response)->body;
+            $response = json_decode($response);
+        } else {
+            $response = $ch->post($this->url, json_encode($data));
+            $response = json_decode($response);
+        }
+
         if ($ch->get_errno()) {
             $errormessage = $ch->error;
             $this->error = 1;
             $this->message = "cURL Error: $errormessage";
         }
+
         return $response;
     }
 }
