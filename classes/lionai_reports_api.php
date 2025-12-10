@@ -244,7 +244,7 @@ class lionai_reports_api {
         $response = null;
 
         // Determine if using new API
-        $isNewApi = !(strpos($this->key, 'LionAI') !== false);
+        $isNewApi = !(strpos($this->url, 'LionAI') !== false);
 
         if($isNewApi) {
             $headers = [
