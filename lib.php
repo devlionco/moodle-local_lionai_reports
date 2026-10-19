@@ -26,7 +26,6 @@
 
 defined('MOODLE_INTERNAL') || die;
 
-require_once($CFG->libdir . '/externallib.php');
 require_once($CFG->dirroot . '/local/lionai_reports/locallib.php');
 
 /**
@@ -39,18 +38,21 @@ require_once($CFG->dirroot . '/local/lionai_reports/locallib.php');
  * @return \core\output\inplace_editable
  */
 function local_lionai_reports_inplace_editable($itemtype, $itemid, $newvalue) {
-    \external_api::validate_context(context_system::instance());
+    \core_external\external_api::validate_context(context_system::instance());
+    if (!is_siteadmin()) {
+        throw new \moodle_exception('permission_require', 'local_lionai_reports');
+    }
     if ($itemtype == 'lioanai_reports_reportname_editable') {
         local_lionai_reports_updatereport($itemid, 'update', json_encode(['name' => $newvalue]));
         $url = new moodle_url('/local/lionai_reports', ['id' => $itemid]);
         $displayvalue = html_writer::link($url, $newvalue);
     }
     return new \core\output\inplace_editable(
-            'local_lioanai_reports',
-            'lioanai_reports_reportname_editable',
-            $itemid,
-            true,
-            $displayvalue,
-            $newvalue,
+        'local_lioanai_reports',
+        'lioanai_reports_reportname_editable',
+        $itemid,
+        true,
+        $displayvalue,
+        $newvalue,
     );
 }

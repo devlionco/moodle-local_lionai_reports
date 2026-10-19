@@ -3,7 +3,21 @@
     <library>
         <location>amd/src/jquery.dataTables.js</location>
         <name>DataTables</name>
-        <version>1.13.6</version>
+        <version>2.0.2</version>
+        <license>MIT</license>
+        <licenseversion></licenseversion>
+    </library>
+    <library>
+        <location>amd/src/dataTables.bootstrap5.js</location>
+        <name>DataTables Bootstrap 5 integration</name>
+        <version>2.0.2</version>
+        <license>MIT</license>
+        <licenseversion></licenseversion>
+    </library>
+    <library>
+        <location>css/datatables.bootstrap5.css</location>
+        <name>DataTables Bootstrap 5 styling</name>
+        <version>2.0.2</version>
         <license>MIT</license>
         <licenseversion></licenseversion>
     </library>

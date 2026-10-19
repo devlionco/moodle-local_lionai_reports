@@ -20,7 +20,7 @@
                 "lastmessages": [
                     {
                         "lastusercontent": "get all users",
-                        "lastassistantcontent": "query text",
+                        "lastassistantcontent": "query text"
                     }
                 ],
                 "actions":[
@@ -30,6 +30,7 @@
                         "exportcrxmlactionurl": "http://localhost/local/lionai_reports/?id=46&export=confreports",
                         "exportsqlactionurl": "http://localhost/local/lionai_reports/?id=46&export=sqlformat",
                         "exportcsvactionurl": "http://localhost/local/lionai_reports/export.php?id=46",
+                        "hasquery": true
                     }
                 ]
             }
@@ -40,7 +41,7 @@
     <form action="{{globals.config.wwwroot}}/local/lionai_reports/index.php" method="post" class="mb-3">
         <input type="hidden" name="action" value="create">
         <input type="hidden" name="sesskey" value="{{sesskey}}">
-        <button class="btn btn-primary" type="submit">Add New Report</button>
+        <button class="btn btn-primary" type="submit">{{#str}}addnewreport, local_lionai_reports{{/str}}</button>
     </form>
 
     <div class="table-responsive" style="overflow-x: visible">
@@ -65,11 +66,11 @@
                         {{#name}}
                             <div class="inplaceeditable inplaceeditable-text" data-inplaceeditable="1"
                                   data-component="local_lionai_reports" data-itemtype="lioanai_reports_reportname_editable" data-itemid="{{id}}"
-                                  data-value="{{name}}" data-editlabel="New name for report {{name}}" data-type="text">
+                                  data-value="{{name}}" data-editlabel="{{#str}}newnameforreport, local_lionai_reports, {{name}}{{/str}}" data-type="text">
                                 <a href="{{link}}" class="aalink">{{name}}</a>
-                                <a href="javascript:void(0);" class="quickeditlink aalink" data-inplaceeditablelink="1" title="New name for report">
+                                <a href="javascript:void(0);" class="quickeditlink aalink" data-inplaceeditablelink="1" title="{{#str}}newnameforreportshort, local_lionai_reports{{/str}}">
                                     <span class="quickediticon visibleifjs">
-                                        <i class="icon fa fa-pencil fa-fw " title="Edit Name" role="img" aria-label="Edit Name"></i>
+                                        <i class="icon fa fa-pencil fa-fw " title="{{#str}}editname, local_lionai_reports{{/str}}" role="img" aria-label="{{#str}}editname, local_lionai_reports{{/str}}"></i>
                                     </span>
                                 </a>
                             </div>
@@ -98,44 +99,48 @@
                         <div class="d-flex flex-wrap align-items-center action-btns">
                             {{#actions}}
                             <div class="d-flex mb-2">
-                                <form action="{{{deleteactionurl}}}" method="post" class="m-0 mr-2">
+                                <form action="{{{deleteactionurl}}}" method="post" class="m-0 me-2">
                                     <input type="hidden" name="action" value="delete">
                                     <input type="hidden" name="sesskey" value="{{sesskey}}">
-                                    <button type="submit" class="p-2 btn btn-secondary btn-sm" data-toggle="tooltip"
-                                        data-html="true" data-placement="left" data-name="delete"
+                                    <button type="submit" class="p-2 btn btn-secondary btn-sm" data-bs-toggle="tooltip"
+                                        data-html="true" data-bs-placement="left" data-name="delete"
                                         title="{{#str}} deletewarning, local_lionai_reports{{/str}}">
                                     </button>
                                 </form>
+                                {{#hasquery}}
                                 {{#exportcrautoactionurl}}
-                                <form action="{{{exportcrautoactionurl}}}" target="_blank" method="post" class="m-0 mr-2">
+                                <form action="{{{exportcrautoactionurl}}}" target="_blank" method="post" class="m-0 me-2">
                                     <input type="hidden" name="autoimport" value="1">
                                     <input type="hidden" name="sesskey" value="{{sesskey}}">
-                                    <button type="submit" class="p-2 btn btn-secondary btn-sm" data-toggle="tooltip"
-                                        data-html="true" data-placement="left" data-name="exportcrauto"
+                                    <button type="submit" class="p-2 btn btn-secondary btn-sm" data-bs-toggle="tooltip"
+                                        data-html="true" data-bs-placement="left" data-name="exportcrauto"
                                         title="{{#str}} exportcrautowarning, local_lionai_reports{{/str}}"></button>
                                 </form>
                                 {{/exportcrautoactionurl}}
-                                <form action="{{{exportcrxmlactionurl}}}" method="post" class="m-0 mr-2">
+                                <form action="{{{exportcrxmlactionurl}}}" method="post" class="m-0 me-2">
                                     <input type="hidden" name="autoimport" value="0">
                                     <input type="hidden" name="sesskey" value="{{sesskey}}">
-                                    <button type="submit" class="p-2 btn btn-secondary btn-sm" data-toggle="tooltip"
-                                        data-html="true" data-placement="left" data-name="exportcrxml"
+                                    <button type="submit" class="p-2 btn btn-secondary btn-sm" data-bs-toggle="tooltip"
+                                        data-html="true" data-bs-placement="left" data-name="exportcrxml"
                                         title="{{#str}} exportcrxmlwarning, local_lionai_reports{{/str}}"></button>
                                 </form>
+                                {{/hasquery}}
                             </div>
+                            {{#hasquery}}
                             <div class="d-flex">
-                                <form action="{{{exportsqlactionurl}}}" method="post" class="m-0 mr-2">
+                                <form action="{{{exportsqlactionurl}}}" method="post" class="m-0 me-2">
                                     <input type="hidden" name="autoimport" value="0">
                                     <input type="hidden" name="sesskey" value="{{sesskey}}">
-                                    <button type="submit" class="p-2 btn btn-secondary btn-sm" data-toggle="tooltip"
-                                        data-html="true" data-placement="left" data-name="exportsql"
+                                    <button type="submit" class="p-2 btn btn-secondary btn-sm" data-bs-toggle="tooltip"
+                                        data-html="true" data-bs-placement="left" data-name="exportsql"
                                         title="{{#str}} exportsqlwarning, local_lionai_reports{{/str}}"></button>
                                 </form>
                                 <button onclick=" window.open('{{{exportcsvactionurl}}}','_blank')" type="submit"
-                                    class="p-2 btn btn-secondary btn-sm" data-toggle="tooltip" data-html="true"
-                                    data-name="exportcsvw" data-placement="left"
+                                    class="p-2 btn btn-secondary btn-sm" data-bs-toggle="tooltip" data-html="true"
+                                    data-name="exportcsvw" data-bs-placement="left"
                                     title="{{#str}} exportcsvwarning, local_lionai_reports{{/str}}"></button>
                             </div>
+                            {{/hasquery}}
                             {{/actions}}
                         </div>
                     </td>
@@ -152,12 +157,17 @@
     </div>
 </div>
 {{#js}}
-require(['local_lionai_reports/jquery.dataTables', 'jquery'], function(DataTable, $) {
+require(['local_lionai_reports/dataTables.bootstrap5', 'jquery'], function(DataTable, $) {
     $('#lionai_reports-table').DataTable({
         columnDefs: [{orderable: false, targets: [2, 3]}],
         order: [[6, 'desc']],
-        dom: '<"d-flex justify-content-end pb-3"f>t<"pt-3 d-flex justify-content-between align-items-center"lip>'
-        });
+        layout: {
+            topStart: null,
+            topEnd: 'search',
+            bottomStart: ['pageLength', 'info'],
+            bottomEnd: 'paging'
+        }
+    });
 });
 require(['core/inplace_editable']);
 {{/js}}

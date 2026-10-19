@@ -37,14 +37,13 @@ require_once($CFG->dirroot . '/local/lionai_reports/locallib.php');
  * @copyright  2023 Devlion <info@devlion.co>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class locallib_test extends \advanced_testcase {
-
+final class locallib_test extends \advanced_testcase {
     /**
      * PHPUnit test case for the local_lionai_reports_removelimitclause function.
      *
      * @covers ::local_lionai_reports_removelimitclause
      */
-    public function test_local_lionai_reports_removelimitclause() {
+    public function test_local_lionai_reports_removelimitclause(): void {
         // Test case: Query with a LIMIT clause.
         $querywithlimit = "SELECT * FROM table LIMIT 10";
         $expectedquery = "SELECT * FROM table";
@@ -60,7 +59,7 @@ class locallib_test extends \advanced_testcase {
      *
      * @covers ::local_lionai_reports_addreport
      */
-    public function test_local_lionai_reports_addreport() {
+    public function test_local_lionai_reports_addreport(): void {
         global $DB, $USER;
 
         $this->resetAfterTest();
@@ -86,7 +85,7 @@ class locallib_test extends \advanced_testcase {
      *
      * @covers ::local_lionai_reports_getreport
      */
-    public function test_local_lionai_reports_getreport() {
+    public function test_local_lionai_reports_getreport(): void {
         global $DB, $USER;
 
         $this->resetAfterTest();
@@ -124,7 +123,7 @@ class locallib_test extends \advanced_testcase {
      *
      * @covers ::local_lionai_reports_updatereport
      */
-    public function test_local_lionai_reports_updatereport() {
+    public function test_local_lionai_reports_updatereport(): void {
         global $DB, $USER;
 
         $this->resetAfterTest();
@@ -148,7 +147,7 @@ class locallib_test extends \advanced_testcase {
 
         $resultid = $DB->insert_record($table, $newreport);
 
-        $data = new stdClass;
+        $data = new stdClass();
         $data->name = 'New report name';
         $data->timemodified = $currenttimestamp + 3600;
 
@@ -161,7 +160,8 @@ class locallib_test extends \advanced_testcase {
 
         $this->assertEquals($data->name, $record->name);
         $this->assertNull($record->options);
-        $this->assertEquals($data->timemodified, $record->timemodified);
+        // Only the name can be updated from client data, so the modification time is left unchanged.
+        $this->assertEquals($currenttimestamp, $record->timemodified);
     }
 
     /**
@@ -169,7 +169,7 @@ class locallib_test extends \advanced_testcase {
      *
      * @covers ::local_lionai_reports_deletereport
      */
-    public function test_local_lionai_reports_deletereport() {
+    public function test_local_lionai_reports_deletereport(): void {
         global $DB, $USER;
 
         $this->resetAfterTest();
@@ -211,7 +211,7 @@ class locallib_test extends \advanced_testcase {
      *
      * @covers ::local_lionai_reports_getresult
      */
-    public function test_local_lionai_reports_getresult() {
+    public function test_local_lionai_reports_getresult(): void {
         global $DB, $USER;
 
         $this->resetAfterTest();
@@ -226,7 +226,7 @@ class locallib_test extends \advanced_testcase {
         $query = 'SELECT * FROM {user} WHERE id = ' . $testuser->id;
 
         // Execute the function.
-        list($status, $message, $records) = local_lionai_reports_getresult($query);
+        [$status, $message, $records] = local_lionai_reports_getresult($query);
 
         // Check if the status is set to 2, indicating a successful query execution.
         $this->assertEquals(2, $status);
@@ -238,7 +238,7 @@ class locallib_test extends \advanced_testcase {
         $this->assertNotEmpty($records);
 
         // Check if the retrieved user's ID matches the created test user's ID.
-        $this->assertEquals($testuser->id, $records[$testuser->id]->id);
+        $this->assertEquals($testuser->id, $records[0]->id);
     }
 
     /**
@@ -246,7 +246,7 @@ class locallib_test extends \advanced_testcase {
      *
      * @covers ::local_lionai_reports_put_history
      */
-    public function test_local_lionai_reports_put_history() {
+    public function test_local_lionai_reports_put_history(): void {
         global $DB, $USER;
 
         $this->resetAfterTest();
@@ -261,7 +261,8 @@ class locallib_test extends \advanced_testcase {
         // Call the function to append the history item to the report.
         $response = local_lionai_reports_put_history(
             $testreport->id,
-            $testhistoryitem);
+            $testhistoryitem
+        );
 
         // Check if the function returned a non-false response.
         $this->assertNotFalse($response);
@@ -307,4 +308,124 @@ class locallib_test extends \advanced_testcase {
         return $testreport;
     }
 
+    /**
+     * Queries that must be accepted by the read-only guard.
+     *
+     * @return array
+     */
+    public static function allowed_queries_provider(): array {
+        return [
+            'plain select' => ['SELECT id FROM {user}'],
+            'trailing semicolon' => ['SELECT 1;'],
+            'cte' => ['WITH a AS (SELECT 1 AS x) SELECT * FROM a'],
+            'union in parentheses' => ['(SELECT 1) UNION (SELECT 2)'],
+            'keywords inside literals' => ["SELECT * FROM {user} WHERE firstname = 'Update; drop table'"],
+            'comment markers inside literals' => ["SELECT 'a--b', \"x#y\" FROM {user}"],
+            'keyword inside a comment' => ['SELECT 1 /* delete */'],
+            'replace function and comment alias' => ["SELECT REPLACE(name, 'a', 'b') AS comment FROM {course}"],
+        ];
+    }
+
+    /**
+     * Queries that must be rejected by the read-only guard.
+     *
+     * @return array
+     */
+    public static function blocked_queries_provider(): array {
+        return [
+            'delete' => ['DELETE FROM {user}'],
+            'update' => ['UPDATE {user} SET deleted = 1'],
+            'second statement' => ['SELECT 1; DROP TABLE x'],
+            'into outfile' => ["SELECT 1 INTO OUTFILE '/tmp/x'"],
+            'into variable' => ['SELECT 1 UNION SELECT 2 INTO @a'],
+            'for update' => ['SELECT * FROM {user} FOR UPDATE'],
+            'lock in share mode' => ['SELECT * FROM {user} LOCK IN SHARE MODE'],
+            'sleep' => ['SELECT SLEEP(100)'],
+            'benchmark' => ["SELECT BENCHMARK(999999999, MD5('a'))"],
+            'load_file' => ["SELECT LOAD_FILE('/etc/passwd')"],
+            'get_lock' => ["SELECT GET_LOCK('a', 10)"],
+            'pg_sleep' => ['SELECT pg_sleep(10)'],
+            'unterminated string' => ["SELECT 'abc"],
+            'unterminated comment' => ['SELECT 1 /* abc'],
+            'data modifying cte' => ['WITH x AS (DELETE FROM {user} RETURNING *) SELECT * FROM x'],
+            'statement hidden after hash comment' => ["SELECT 1 # \n; DELETE FROM x"],
+            'does not start with select' => ['SHOW TABLES'],
+        ];
+    }
+
+    /**
+     * Allowed queries pass the guard.
+     *
+     * @dataProvider allowed_queries_provider
+     * @covers ::local_lionai_reports_is_select_only
+     * @param string $sql
+     */
+    public function test_is_select_only_allows(string $sql): void {
+        $this->assertTrue(local_lionai_reports_is_select_only($sql));
+    }
+
+    /**
+     * Dangerous queries are rejected by the guard.
+     *
+     * @dataProvider blocked_queries_provider
+     * @covers ::local_lionai_reports_is_select_only
+     * @param string $sql
+     */
+    public function test_is_select_only_blocks(string $sql): void {
+        $this->assertFalse(local_lionai_reports_is_select_only($sql));
+    }
+
+    /**
+     * MySQL executable comments run as SQL, so they are only rejected on MySQL/MariaDB (elsewhere they are plain comments).
+     *
+     * @covers ::local_lionai_reports_is_select_only
+     */
+    public function test_is_select_only_executable_comment(): void {
+        global $DB;
+
+        $this->resetAfterTest();
+        $allowed = $DB->get_dbfamily() !== 'mysql';
+        $this->assertSame($allowed, local_lionai_reports_is_select_only('SELECT /*!50000 1; DROP TABLE x*/ 1'));
+    }
+
+    /**
+     * Non SELECT queries are not executed.
+     *
+     * @covers ::local_lionai_reports_getresult
+     */
+    public function test_getresult_rejects_write_queries(): void {
+        $this->resetAfterTest();
+        [$status, $message] = local_lionai_reports_getresult('DELETE FROM {config}');
+        $this->assertEquals(0, $status);
+        $this->assertNotEmpty($message);
+    }
+
+    /**
+     * The rate request carries the credential under the same key as the prompt request.
+     *
+     * @covers \local_lionai_reports\lionai_reports_api::prepare_rate
+     */
+    public function test_api_rate_request_uses_token(): void {
+        $api = new \local_lionai_reports\lionai_reports_api('secret', 'https://example.invalid/v1');
+        $method = new \ReflectionMethod($api, 'prepare_rate');
+        $method->setAccessible(true);
+        $data = $method->invoke($api, 5, 1);
+        $this->assertSame('secret', $data['token']);
+        $this->assertSame(5, $data['promptid']);
+    }
+
+    /**
+     * The rate response is handled as the already decoded object returned by send_request.
+     *
+     * @covers \local_lionai_reports\lionai_reports_api::process_rate_response
+     */
+    public function test_api_process_rate_response(): void {
+        $api = new \local_lionai_reports\lionai_reports_api('secret', 'https://example.invalid/v1');
+        $method = new \ReflectionMethod($api, 'process_rate_response');
+        $method->setAccessible(true);
+
+        $this->assertSame(['Thanks', 2], $method->invoke($api, (object) ['success' => 'Thanks']));
+        $this->assertSame(['Bad prompt', 0], $method->invoke($api, (object) ['error' => 'Bad prompt']));
+        $this->assertSame(0, $method->invoke($api, null)[1]);
+    }
 }

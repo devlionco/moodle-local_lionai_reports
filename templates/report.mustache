@@ -32,7 +32,7 @@ Example context (json):
     <div class="row">
         <h2 id="lionai_reports-report-name" class="mb-2 text-muted col-md-8">
             <span id="edit-name">{{name}}</span>
-            <button id="edit-name-button" class="btn btn-link">
+            <button id="edit-name-button" class="btn btn-sm btn-link">
                 <i class="fa fa-pencil"></i>
             </button>
         </h2>
@@ -55,14 +55,14 @@ Example context (json):
                     rows="5">{{lastusercontent}}</textarea>
             </div>
 
-            <div class="row container mt-3">
-                <button class="btn btn-primary ml-0" name="senduserprompt" id="id_senduserprompt" type="button"
-                    data-toggle="tooltip" data-placement="left" title="{{#str}}ctrlenter, local_lionai_reports{{/str}}">
+            <div class="container d-flex flex-wrap align-items-center gap-2 mt-3">
+                <button class="btn btn-sm btn-primary ms-0" name="senduserprompt" id="id_senduserprompt" type="button"
+                    data-bs-toggle="tooltip" data-bs-placement="left" title="{{#str}}ctrlenter, local_lionai_reports{{/str}}">
                     {{#str}}sendprompt, local_lionai_reports{{/str}}
                 </button>
 
                 {{#lastusercontent}}
-                <button type="button" class="btn btn-secondary lionai_reports-history ml-1" data-toggle="modal"
+                <button type="button" class="btn btn-sm btn-secondary lionai_reports-history ms-1" data-bs-toggle="modal"
                     data-target="#historyModal" id="lionai_reportshistory" role="button">
                     {{#str}}pickfromhistory, local_lionai_reports{{/str}}
                 </button>
@@ -70,55 +70,55 @@ Example context (json):
 
                 {{#actions}}
 
-                <div class="{{is_new}} align-items-center ml-auto mr-auto action-btns">
+                <div class="{{is_new}} align-items-center action-btns">
                     {{#exportcrautoactionurl}}
 
-                    <form action="{{{exportcrautoactionurl}}}" target="_blank" method="post" class="m-0 mr-2">
+                    <form action="{{{exportcrautoactionurl}}}" target="_blank" method="post" class="m-0 me-2">
                         <input type="hidden" name="autoimport" value="1">
                         <input type="hidden" name="sesskey" value="{{sesskey}}">
-                        <button type="submit" class="p-2 btn btn-secondary btn-sm" data-toggle="tooltip"
-                            data-html="true" data-placement="left" data-name="exportcrauto"
+                        <button type="submit" class="p-2 btn btn-secondary btn-sm" data-bs-toggle="tooltip"
+                            data-html="true" data-bs-placement="left" data-name="exportcrauto"
                             title="{{#str}} exportcrautowarning, local_lionai_reports{{/str}}"></button>
                     </form>
                     {{/exportcrautoactionurl}}
-                    <form action="{{{exportcrxmlactionurl}}}" method="post" class="m-0 mr-2">
+                    <form action="{{{exportcrxmlactionurl}}}" method="post" class="m-0 me-2">
                         <input type="hidden" name="autoimport" value="0">
                         <input type="hidden" name="sesskey" value="{{sesskey}}">
-                        <button type="submit" class="p-2 btn btn-secondary btn-sm" data-toggle="tooltip"
-                            data-html="true" data-placement="left" data-name="exportcrxml"
+                        <button type="submit" class="p-2 btn btn-secondary btn-sm" data-bs-toggle="tooltip"
+                            data-html="true" data-bs-placement="left" data-name="exportcrxml"
                             title="{{#str}} exportcrxmlwarning, local_lionai_reports{{/str}}"></button>
                     </form>
-                    <form action="{{{exportsqlactionurl}}}" method="post" class="m-0 mr-2">
+                    <form action="{{{exportsqlactionurl}}}" method="post" class="m-0 me-2">
                         <input type="hidden" name="autoimport" value="0">
                         <input type="hidden" name="sesskey" value="{{sesskey}}">
-                        <button type="submit" class="p-2 btn btn-secondary btn-sm" data-toggle="tooltip"
-                            data-html="true" data-placement="left" data-name="exportsql"
+                        <button type="submit" class="p-2 btn btn-secondary btn-sm" data-bs-toggle="tooltip"
+                            data-html="true" data-bs-placement="left" data-name="exportsql"
                             title="{{#str}} exportsqlwarning, local_lionai_reports{{/str}}"></button>
                     </form>
                     <button onclick="window.open('{{{exportcsvactionurl}}}','_blank')" type="submit"
-                        class="p-2 btn btn-secondary btn-sm" data-toggle="tooltip" data-html="true"
-                        data-name="exportcsvw" data-placement="left"
+                        class="p-2 btn btn-secondary btn-sm" data-bs-toggle="tooltip" data-html="true"
+                        data-name="exportcsvw" data-bs-placement="left"
                         title="{{#str}} exportcsvwarning, local_lionai_reports{{/str}}"></button>
                 </div>
                 {{/actions}}
 
-                <div id="ratebtns-wrapper" class="mx-auto">
-                    <button type="button" class="btn btn-outline-success mr-1" id="thmbup" role="button"
+                <div id="ratebtns-wrapper" class="d-flex">
+                    <button type="button" class="btn btn-sm btn-outline-success me-1" id="thmbup" role="button"
                         title="{{#str}}thumbupbtn, local_lionai_reports{{/str}}" data-rate="1"
                         data-promptid="{{promptid}}">
                         <i class="fa fa-thumbs-up" aria-hidden="true"></i>
                     </button>
 
-                    <button type="button" class="btn btn-outline-danger" id="thmbdown" role="button"
+                    <button type="button" class="btn btn-sm btn-outline-danger" id="thmbdown" role="button"
                         title="{{#str}}thumbdownbtn, local_lionai_reports{{/str}}" data-rate="-1"
                         data-promptid="{{promptid}}">
                         <i class="fa fa-thumbs-down" aria-hidden="true"></i>
                     </button>
                 </div>
 
-                <div class="dropdown ml-auto">
-                    <a class="btn btn-outline-info dropdown-toggle lionai_reports-examples" href="#" role="button"
-                        data-toggle="dropdown" aria-expanded="false">
+                <div class="dropdown">
+                    <a class="btn btn-sm btn-outline-info dropdown-toggle lionai_reports-examples" href="#" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
                         {{#str}}examples, local_lionai_reports{{/str}}
                     </a>
                     <div class="dropdown-menu lionai_reports-examples-list">
@@ -144,9 +144,9 @@ Example context (json):
             <div class="row container mt-3">
                 <textarea id="id_querysql" class="form-control" rows="5">{{lastassistantcontent}}</textarea>
             </div>
-            <div class="row container mt-3">
-                <button class="btn btn-primary ml-0" name="getresult" id="id_getresult" type="button"
-                    data-toggle="tooltip" data-placement="left" title="{{#str}}getresult, local_lionai_reports{{/str}}">
+            <div class="container mt-3">
+                <button class="btn btn-sm btn-primary ms-0" name="getresult" id="id_getresult" type="button"
+                    data-bs-toggle="tooltip" data-bs-placement="left" title="{{#str}}getresult, local_lionai_reports{{/str}}">
                     {{#str}}getresult, local_lionai_reports{{/str}}
                 </button>
             </div>
@@ -154,9 +154,9 @@ Example context (json):
                 <div id="id_queryresultmessage" class="d-none alert alert-warning">
                 </div>
             </div>
-            <div class="row container">
-                <a role="button" href="#" class="d-none btn btn-success mb-3" id="id_trytofix"
-                data-toggle="tooltip" data-placement="left" title="{{#str}}trytofixtooltip, local_lionai_reports{{/str}}">
+            <div class="container">
+                <a role="button" href="#" class="d-none btn btn-sm btn-success mb-3" id="id_trytofix"
+                data-bs-toggle="tooltip" data-bs-placement="left" title="{{#str}}trytofixtooltip, local_lionai_reports{{/str}}">
                     {{#str}}trytofix, local_lionai_reports{{/str}}
                 </a>
             </div>

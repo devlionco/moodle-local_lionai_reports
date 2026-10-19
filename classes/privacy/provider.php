@@ -46,18 +46,20 @@ class provider implements
 
     // This plugin currently implements the original plugin\provider interface.
     core_user_data_provider {
-
     /**
      * Returns meta data about this plugin.
      *
      * @param   collection $collection The initialised collection to add items to.
      * @return  collection A listing of user data stored through this plugin.
      */
-    public static function get_metadata(collection $collection) :collection {
+    public static function get_metadata(collection $collection): collection {
 
         $collection->add_database_table('local_lionai_reports', [
                 'userid' => 'privacy:metadata:local_lionai_reports:userid',
+                'name' => 'privacy:metadata:local_lionai_reports:name',
                 'options' => 'privacy:metadata:local_lionai_reports:options',
+                'timecreated' => 'privacy:metadata:local_lionai_reports:timecreated',
+                'timemodified' => 'privacy:metadata:local_lionai_reports:timemodified',
         ], 'privacy:metadata:local_lionai_reports');
 
         return $collection;
@@ -69,7 +71,7 @@ class provider implements
      * @param   int $userid The user to search.
      * @return  contextlist $contextlist The contextlist containing the list of contexts used in this plugin.
      */
-    public static function get_contexts_for_userid($userid) : contextlist {
+    public static function get_contexts_for_userid(int $userid): contextlist {
         $contextlist = new contextlist();
 
         // Find the reports created by the userid.
@@ -184,13 +186,15 @@ class provider implements
      *
      * @param  int $userid The user ID
      */
-    protected static function delete_data($userid) {
+    protected static function delete_data(int $userid): void {
         global $DB;
 
         // Reports are considered to be 'owned' by the institution, even if they were originally written by a specific
         // user. They are still exported in the list of a users data, but they are not removed.
         // The ownerid is instead anonymised.
+        // The prompt history (options) may contain personal data typed by the user, so it is removed as well.
         $params['userid'] = $userid;
+        $DB->set_field_select('local_lionai_reports', 'options', null, "userid = :userid", $params);
         $DB->set_field_select('local_lionai_reports', 'userid', 0, "userid = :userid", $params);
     }
 }

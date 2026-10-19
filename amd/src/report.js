@@ -25,12 +25,12 @@
 import Ajax from "core/ajax";
 import Notification from "core/notification";
 import Templates from "core/templates";
-import spinneroverlay from "./spinneroverlay";
-import DataTable from "./jquery.dataTables";
-import ModalFactory from 'core/modal_factory';
+import spinneroverlay from "local_lionai_reports/spinneroverlay";
+import DataTable from "local_lionai_reports/jquery.dataTables";
+import Modal from 'core/modal';
 import ModalEvents from 'core/modal_events';
 import {get_string as getString} from 'core/str';
-import * as CodeMirror from "./codemirror";
+import * as CodeMirror from "local_lionai_reports/codemirror";
 
 const dataTemp = {
     report: null,
@@ -89,6 +89,17 @@ const getReport = (id) =>
  * @returns {Promise<Object>} A Promise that resolves to the updated report object.
  * @throws {Error} If an error occurs during the AJAX call.
  */
+/**
+ * Creates the SQL editor for the query textarea and keeps the textarea in sync with it.
+ *
+ * @param {HTMLTextAreaElement} textarea - The textarea to replace.
+ * @returns {Object} The editor view.
+ */
+const createSqlEditor = (textarea) => CodeMirror.editorFromTextArea(textarea, (sql) => {
+    textarea.value = sql;
+    textarea.dispatchEvent(new Event("change"));
+});
+
 const updateReport = (id, action = "update", data) => {
     return Ajax.call([
         {
@@ -132,7 +143,7 @@ const renderReport = () => {
 
             initTargets();
 
-            dataTemp.editor = CodeMirror.editorFromTextArea(Selectors.targets.querysqlElem);
+            dataTemp.editor = createSqlEditor(Selectors.targets.querysqlElem);
 
             Selectors.targets.thmbup.onclick = (e) =>
                 ratePrompt(e.currentTarget.dataset.promptid, e.currentTarget.dataset.rate, e.currentTarget);
@@ -149,10 +160,9 @@ const renderReport = () => {
                 getResult(Selectors.targets.querysqlElem.value);
             });
 
-            Selectors.targets.trytofixlElem.addEventListener("click", () => {
-                let value = "";
-                let trytofixprompt = "try to fix this sql:\n\n";
-                value += trytofixprompt;
+            Selectors.targets.trytofixlElem.addEventListener("click", async() => {
+                // The instruction is sent to the AI service, it is kept in a lang string so it can be tuned.
+                let value = await getString("trytofixprompt", "local_lionai_reports") + "\n\n";
 
                 let actualsql = Selectors.targets.querysqlElem.value;
                 actualsql += "\n\n";
@@ -297,9 +307,9 @@ let setPreviewMessage = async function(count) {
     const previewNote1 = await getString('previewnote1', 'local_lionai_reports');
     const previewNote2 = await getString('previewnote2', 'local_lionai_reports');
     let previewMessageHtml = '<h2>' + previewTitle + '</h2><br>';
-    previewMessageHtml = previewMessageHtml +  '<span class="font-weight-bold">' + previewTotal + '</span><br>';
-    previewMessageHtml = previewMessageHtml +  '<span>' + previewNote1 + '</span><br>';
-    previewMessageHtml = previewMessageHtml +  '<span class="text-muted">' + previewNote2 + '</span>';
+    previewMessageHtml = previewMessageHtml + '<span class="font-weight-bold">' + previewTotal + '</span><br>';
+    previewMessageHtml = previewMessageHtml + '<span>' + previewNote1 + '</span><br>';
+    previewMessageHtml = previewMessageHtml + '<span class="text-muted">' + previewNote2 + '</span>';
     previewWrapper.innerHTML = previewMessageHtml;
 };
 
@@ -318,7 +328,7 @@ const setSql = (sql) => {
         });
     }
 
-    dataTemp.editor = CodeMirror.editorFromTextArea(Selectors.targets.querysqlElem);
+    dataTemp.editor = createSqlEditor(Selectors.targets.querysqlElem);
     getResult(sql);
 };
 
@@ -328,11 +338,11 @@ const setSql = (sql) => {
 const showModal = async() => {
        const response = await getReport(dataTemp.report.id);
                                 dataTemp.report = JSON.parse(response.data).report;
-    const modal = await ModalFactory.create({
+    const modal = await Modal.create({
         title: getString('pickfromhistory', 'local_lionai_reports'),
         large: true,
         body: Templates.render('local_lionai_reports/historymodal', dataTemp.report),
-        footer: 'An example footer content',
+        show: false,
     });
     modal.show();
     Selectors.targets.createdModal = modal;
@@ -378,6 +388,12 @@ const getResult = (query) => {
      */
     hideElement(Selectors.targets.queryresultmessage);
     hideElement(Selectors.targets.trytofixlElem);
+    // Remember the (possibly edited) SQL in the history. It is a separate write call, so the preview itself stays
+    // read-only; a failure here (e.g. read-only DB user) must not prevent the preview.
+    Ajax.call([{
+        methodname: "local_lionai_reports_save_sql",
+        args: {query: query, id: dataTemp.report.id},
+    }])[0].catch(() => null);
     Ajax.call([
         {
             methodname: "local_lionai_reports_getresult",
@@ -424,7 +440,7 @@ const setTargetText = (newText/* , autoSave = false */) => {
  */
 const setMessage = (value, correct = 2) => {
     if (value.length > 0) {
-        document.getElementById(Selectors.elements.queryresultmessage).innerHTML = value;
+        document.getElementById(Selectors.elements.queryresultmessage).textContent = value;
         /**
          * Shows the alert message element by removing the "d-none" class.
          */
@@ -454,6 +470,13 @@ const originalDataChanged = () => {
  * @param {string} prompt - The user prompt to send.
  */
 const sendPrompt = (prompt) => {
+    // The prompt must contain at least 2 words.
+    if (String(prompt || "").trim().split(/\s+/).filter(Boolean).length < 2) {
+        getString("promptminwords", "local_lionai_reports")
+            .then((message) => Notification.addNotification({message, type: "warning"}))
+            .catch(Notification.exception);
+        return;
+    }
     spinneroverlay.showspinneroverlay([
         "id_userprompt",
         "id_querysql",
@@ -473,13 +496,13 @@ const sendPrompt = (prompt) => {
                 engine: dataTemp.report.engine,
                 conversationid: dataTemp.report.conversationid,
             },
-            done: function(data) {
+            done: async function(data) {
                 let message = data.message;
                 let correct = data.correct;
                 let autoSave = true;
                 if (correct != 2) {
                     setMessage(
-                        "Does not look like correct code. Use carefully.",
+                        await getString("notcorrectcode", "local_lionai_reports"),
                         correct
                     );
                     spinneroverlay.hidespinneroverlay([
@@ -494,7 +517,7 @@ const sendPrompt = (prompt) => {
                             el.remove();
                         });
                     }
-                    dataTemp.editor = CodeMirror.editorFromTextArea(Selectors.targets.querysqlElem);
+                    dataTemp.editor = createSqlEditor(Selectors.targets.querysqlElem);
                     return;
                 }
                 dataTemp.sqlOriginal = message;

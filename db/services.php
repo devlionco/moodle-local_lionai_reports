@@ -28,6 +28,15 @@ defined('MOODLE_INTERNAL') || die;
 
 $functions = [
 
+    'local_lionai_reports_test_connection' => [
+        'classname' => 'local_lionai_reports\\external\\test_connection',
+        'methodname' => 'execute',
+        'description' => 'Test the connection to the LionAI API',
+        'type' => 'read',
+        'ajax' => true,
+        'capabilities' => 'local/lionai_reports:manage',
+    ],
+
     'local_lionai_reports_getlist' => [
         'classname' => 'local_lionai_reports_external',
         'methodname' => 'getlist',
@@ -60,7 +69,14 @@ $functions = [
         'classname' => 'local_lionai_reports_external',
         'methodname' => 'rate_prompt',
         'description' => 'rate_prompt.',
-        'type' => 'read',
+        'type' => 'write',
+        'ajax' => true,
+    ],
+    'local_lionai_reports_save_sql' => [
+        'classname' => 'local_lionai_reports_external',
+        'methodname' => 'save_sql',
+        'description' => 'Store manually edited SQL in the report history',
+        'type' => 'write',
         'ajax' => true,
     ],
     'local_lionai_reports_getresult' => [

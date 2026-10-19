@@ -31,8 +31,8 @@
 import Ajax from "core/ajax";
 import {exception as displayException} from 'core/notification';
 import Templates from 'core/templates';
-import * as LionAiReport from "./report";
-import spinneroverlay from "./spinneroverlay";
+import * as LionAiReport from "local_lionai_reports/report";
+import spinneroverlay from "local_lionai_reports/spinneroverlay";
 
 /**
  * The CSS selectors used in the module.

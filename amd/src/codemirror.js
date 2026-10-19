@@ -25867,20 +25867,27 @@ define(['exports'], (function (exports) { 'use strict';
    */
    const StandardSQL = /*@__PURE__*/SQLDialect.define({});
 
-   const editorFromTextArea = (textarea) => {
-     let view = new EditorView({
+   /**
+    * Replaces a textarea with an editor.
+    *
+    * @param {HTMLTextAreaElement} textarea The textarea.
+    * @param {Function} [onchange] Optional callback receiving the document text whenever the editor updates.
+    * @returns {EditorView}
+    */
+   const editorFromTextArea = (textarea, onchange) => {
+     const view = new EditorView({
         doc: textarea.value,
         extensions: [
             basicSetup,
             sql(),
-            EditorView.updateListener.of((update) =>{ 
-                document.getElementById('id_querysql').value = view.state.doc.toString();
-                const e = new Event("change");
-                document.getElementById('id_querysql').dispatchEvent(e);
+            EditorView.updateListener.of(() => {
+                if (typeof onchange === 'function') {
+                    onchange(view.state.doc.toString());
+                }
             })
         ]
     });
-  
+
      textarea.parentNode.insertBefore(view.dom, textarea);
      textarea.style.display = "none";
      if (textarea.form) {
@@ -25888,8 +25895,7 @@ define(['exports'], (function (exports) { 'use strict';
            textarea.value = view.state.doc.toString();
          });
      }
-     document.getElementById('id_querysql').value = view.state.doc.toString();
-     return view
+     return view;
    };
 
    exports.editorFromTextArea = editorFromTextArea;

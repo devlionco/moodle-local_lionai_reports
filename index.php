@@ -28,7 +28,7 @@ require_once($CFG->dirroot . '/local/lionai_reports/locallib.php');
 
 require_login();
 if (!is_siteadmin()) {
-    throw new \moodle_exception(get_string('permission_require', 'local_lionai_reports'));
+    throw new \moodle_exception('permission_require', 'local_lionai_reports');
     return;
 }
 
@@ -41,6 +41,7 @@ $autoimport = optional_param('autoimport', null, PARAM_INT);
 $autoimport = isset($autoimport) && $autoimport == 1 ? 1 : 0;
 
 if ($export) {
+    require_sesskey();
     switch ($export) {
         case 'confreports':
             local_lionai_reports_export_confreports($id, $autoimport);
@@ -60,10 +61,11 @@ if ($export) {
 
 // Check if the 'action' parameter is set to 'create' in the POST request.
 if (isset($action)) {
+    require_sesskey();
     if ($action === 'create') {
         $id = local_lionai_reports_addreport();
     }
-    if ($action === 'delete') {
+    if ($action === 'delete' && optional_param('confirm', 0, PARAM_BOOL)) {
         local_lionai_reports_deletereport($id);
         $id = 0;
     }
@@ -72,7 +74,7 @@ if (isset($action)) {
 $context = context_system::instance();
 
 $PAGE->set_context($context);
-$PAGE->set_pagelayout('incourse');
+$PAGE->set_pagelayout('admin');
 
 $PAGE->set_title('LionAI Reports');
 
@@ -85,14 +87,37 @@ if ($id !== 0) {
     $PAGE->navbar->add($DB->get_field('local_lionai_reports', 'name', ['id' => $id]), $allreportsurl);
 }
 
-$PAGE->requires->css('/local/lionai_reports/css/datatables.css');
+// The reports list uses the DataTables Bootstrap 5 styling, a single report keeps the default one.
+if ($id === 0) {
+    $PAGE->requires->css('/local/lionai_reports/css/datatables.bootstrap5.css');
+} else {
+    $PAGE->requires->css('/local/lionai_reports/css/datatables.css');
+}
 
 $PAGE->set_url('/local/lionai_reports/index.php', ['id' => $id]);
 
 $PAGE->set_cacheable(true);
+
+// Ask for a confirmation before deleting a report.
+if ($action === 'delete' && !optional_param('confirm', 0, PARAM_BOOL) && $id) {
+    $reportname = format_string($DB->get_field('local_lionai_reports', 'name', ['id' => $id]));
+    $continueurl = new moodle_url(
+        '/local/lionai_reports/index.php',
+        ['id' => $id, 'action' => 'delete', 'confirm' => 1, 'sesskey' => sesskey()]
+    );
+    echo $OUTPUT->header();
+    echo $OUTPUT->confirm(
+        get_string('deleteconfirm', 'local_lionai_reports', $reportname),
+        new single_button($continueurl, get_string('delete'), 'post'),
+        new moodle_url('/local/lionai_reports/index.php')
+    );
+    echo $OUTPUT->footer();
+    exit;
+}
+
 echo $OUTPUT->header();
 
-$context = new stdClass;
+$context = new stdClass();
 $page = $OUTPUT->render_from_template('local_lionai_reports/main', $context);
 
 echo $page;

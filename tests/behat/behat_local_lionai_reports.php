@@ -50,6 +50,7 @@ class behat_local_lionai_reports extends behat_base {
     /**
      * I type the text :arg1 into the input with class :arg2
      *
+     * @Given /^I type the text "(?P<text_string>(?:[^"]|\\")*)" into the input with class "(?P<class_string>(?:[^"]|\\")*)"$/
      * @param string $arg1
      * @param string $arg2
      */
@@ -61,5 +62,47 @@ class behat_local_lionai_reports extends behat_base {
         }
 
         $input->setValue($arg1);
+    }
+
+    /**
+     * Creates a LionAI report whose history already holds the given SQL, without calling the AI service.
+     *
+     * @Given /^a LionAI report named "([^"]*)" exists with the query "([^"]*)"$/
+     * @param string $name
+     * @param string $sql
+     */
+    public function a_lionai_report_exists_with_the_query(string $name, string $sql) {
+        global $DB;
+
+        $now = time();
+        $DB->insert_record('local_lionai_reports', (object) [
+            'name' => $name,
+            'userid' => $DB->get_field('user', 'id', ['username' => 'admin'], MUST_EXIST),
+            'options' => json_encode(['history' => [
+                ['role' => 'user', 'content' => 'Prepared prompt'],
+                ['role' => 'assistant', 'content' => $sql],
+            ]]),
+            'timecreated' => $now,
+            'timemodified' => $now,
+        ]);
+    }
+
+    /**
+     * Opens the LionAI report with the given name.
+     *
+     * @Given /^I open the LionAI report named "([^"]*)"$/
+     * @param string $name
+     */
+    public function i_open_the_lionai_report_named(string $name) {
+        global $DB;
+
+        $id = $DB->get_field_select(
+            'local_lionai_reports',
+            'id',
+            $DB->sql_compare_text('name') . ' = ' . $DB->sql_compare_text(':name'),
+            ['name' => $name],
+            MUST_EXIST
+        );
+        $this->execute('behat_general::i_visit', ['/local/lionai_reports/index.php?id=' . $id]);
     }
 }

@@ -25,50 +25,58 @@
  */
 namespace local_lionai_reports;
 
-defined('MOODLE_INTERNAL') || die;
-
 /**
- * class of connecting to API of an AI
+ * Client of the LionAI API (generates SQL from natural language prompts and rates the answers).
+ *
+ * @package    local_lionai_reports
+ * @copyright  2023 Devlion <info@devlion.co>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class lionai_reports_api {
-
     /** @var string */
     private $key;
 
     /** @var string */
     private $url;
 
-    /** @var string */
-    private $error;
+    /** @var int Non zero when the last request failed at cURL level. */
+    private $error = 0;
 
     /** @var string */
-    private $message;
+    private $message = '';
 
     /** @var string */
     private $action;
 
-    /** @var int */
-    private $promptid;
+    /** @var string */
+    private $promptid = '';
 
-    /**
-     * Construct function
-     *
-     * @param string $key
-     * @param string $url
-     * @param string $action
-     */
-    public function __construct($key, $url, $action = 'reportAction') {
+    /** @var int HTTP status code of the last request. */
+    private $httpcode = 0;
+
+    /** @var string Raw body of the last request. */
+    private $rawresponse = '';
+
+        /**
+         * Constructor.
+         *
+         * @param string $key The API key.
+         * @param string $url The API endpoint URL.
+         * @param string $action The action sent to the legacy API.
+         */
+    public function __construct(string $key, string $url, string $action = 'reportAction') {
         $this->key = $key;
         $this->url = $url;
         $this->action = $action;
     }
 
-    /**
-     * send_prompt
-     *
-     * @param string $prompt
-     */
-    public function send_prompt($prompt) {
+        /**
+         * Sends a prompt to the API and returns the extracted SQL.
+         *
+         * @param string $prompt The user prompt.
+         * @return array [string sql or error message, int correct (2 = valid SQL), string prompt id]
+         */
+    public function send_prompt(string $prompt): array {
 
         $promptobj = $this->prepare_prompt($prompt);
 
@@ -77,17 +85,82 @@ class lionai_reports_api {
         if ($this->error) {
             return [$this->message, 0];
         }
+        if ($this->httpcode >= 400) {
+            return [$this->http_error_message(), 0, ''];
+        }
 
         return $this->process_sql_response($response);
     }
 
     /**
-     * rate_prompt
+     * Builds the message for a failed HTTP request. A "Forbidden" answer means the API key is not valid.
      *
-     * @param int $promptid
-     * @param int $rate
+     * @return string
      */
-    public function rate_prompt($promptid, $rate) {
+    private function http_error_message(): string {
+        $decoded = json_decode($this->rawresponse);
+        if ($this->httpcode === 403 && is_object($decoded) && ($decoded->message ?? '') === 'Forbidden') {
+            return get_string('invalidapikey', 'local_lionai_reports');
+        }
+
+        // A wrong URL (the gateway does not know the path) is not a key problem.
+        if (
+            in_array($this->httpcode, [403, 404], true) && is_object($decoded)
+                && in_array($decoded->message ?? '', ['Missing Authentication Token', 'Not Found'], true)
+        ) {
+            return get_string('invalidapiurl', 'local_lionai_reports');
+        }
+
+        $detail = \core_text::substr(trim(strip_tags($this->rawresponse)), 0, 200);
+        return get_string(
+            'testconnection_httperror',
+            'local_lionai_reports',
+            ['code' => $this->httpcode ?: '-', 'detail' => $detail]
+        );
+    }
+
+    /**
+     * Tests the connection to the API using a minimal request.
+     *
+     * @return array [bool success, string message]
+     */
+    public function test_connection(): array {
+        $this->error = 0;
+        $this->message = '';
+        $response = $this->send_request($this->prepare_prompt('test connection'));
+
+        // Network / cURL level failure (DNS, timeout, SSL, refused...).
+        if ($this->error) {
+            return [false, $this->message];
+        }
+
+        // HTTP level failure (wrong key, wrong URL, server error).
+        if ($this->httpcode >= 400 || $this->httpcode === 0) {
+            return [false, $this->http_error_message()];
+        }
+
+        // The service answered, but not with the expected format (usually a wrong URL).
+        if (!is_object($response) || !isset($response->message)) {
+            $detail = \core_text::substr(trim(strip_tags($this->rawresponse)), 0, 200);
+            return [false, get_string('testconnection_badresponse', 'local_lionai_reports', $detail)];
+        }
+
+        // The service answered with an error (invalid key, quota exceeded...).
+        if (!empty($response->iserror)) {
+            return [false, (string) $response->message];
+        }
+
+        return [true, ''];
+    }
+
+        /**
+         * Sends a rating of a previous answer to the API.
+         *
+         * @param int $promptid The id of the prompt, as returned by the API.
+         * @param int $rate The rating (1 or -1).
+         * @return array [string message, int status (2 = success)]
+         */
+    public function rate_prompt(int $promptid, int $rate): array {
 
         $promptobj = $this->prepare_rate($promptid, $rate);
 
@@ -95,22 +168,24 @@ class lionai_reports_api {
         if ($this->error) {
             return [$this->message, 0];
         }
+        if ($this->httpcode >= 400) {
+            return [$this->http_error_message(), 0];
+        }
 
         return $this->process_rate_response($response);
     }
 
-    /**
-     * prepare_prompt
-     *
-     * @param string $prompt
-     *
-     * @return string json encoded of the data
-     */
-    private function prepare_data($prompt) {
+        /**
+         * Builds the JSON data (Moodle version, DB type and the request) sent to the API.
+         *
+         * @param string $prompt The user prompt.
+         * @return string JSON encoded data
+         */
+    private function prepare_data(string $prompt): string {
         global $CFG, $DB;
 
         require("$CFG->dirroot/version.php");
-        require($CFG->libdir.'/environmentlib.php');
+        require_once($CFG->libdir . '/environmentlib.php');
 
         $data = [];
         $data['moodle_ver'] = normalize_version($release);
@@ -120,12 +195,13 @@ class lionai_reports_api {
         return json_encode($data);
     }
 
-    /**
-     * prepare_prompt
-     *
-     * @param string $prompt
-     */
-    private function prepare_prompt($prompt) {
+        /**
+         * Builds the request body of a prompt.
+         *
+         * @param string $prompt The user prompt.
+         * @return array The request body
+         */
+    private function prepare_prompt(string $prompt): array {
         $promptobj = [];
         $promptobj['data'] = $this->prepare_data($prompt);
         $promptobj['action'] = $this->action;
@@ -133,70 +209,76 @@ class lionai_reports_api {
         return $promptobj;
     }
 
-    /**
-     * prepare_rate
-     *
-     * @param int $promptid
-     * @param int $rate
-     */
-    private function prepare_rate($promptid, $rate) {
+        /**
+         * Builds the request body of a rating.
+         *
+         * @param int $promptid The id of the prompt.
+         * @param int $rate The rating (1 or -1).
+         * @return array The request body
+         */
+    private function prepare_rate(int $promptid, int $rate): array {
         $promptobj = [];
         $promptobj['promptid'] = $promptid;
         $promptobj['rating'] = $rate;
         $promptobj['action'] = $this->action;
-        $promptobj['key'] = $this->key;
+        $promptobj['token'] = $this->key;
         return $promptobj;
     }
 
-    /**
-     * Error handling
-     */
-    private function has_error() {
-        // TO DO: Error handling.
-        return false;
-    }
+        /**
+         * Processes the response of a prompt request.
+         *
+         * @param object|null $response The decoded response, as returned by send_request().
+         * @return array [string sql or error message, int correct, string prompt id]
+         */
+    private function process_sql_response(?object $response): array {
 
-    /**
-     * process_sql_response
-     *
-     * @param array $response
-     */
-    private function process_sql_response($response) {
+        if (!is_object($response) || !isset($response->message)) {
+            $this->error = 1;
+            $this->message = get_string('invalidapiresponse', 'local_lionai_reports');
+            return [$this->message, 0, ''];
+        }
 
         $this->message = str_replace('\n', "\n", $response->message);
-        $this->promptid = $response->promptid;
+        $this->promptid = $response->promptid ?? '';
 
-        if (!$response->iserror) {
+        if (empty($response->iserror)) {
             return self::extract_sql($this->message);
         } else {
             return [$this->message, 0, $this->promptid];
         }
     }
 
-    /**
-     * process_rate_response
-     *
-     * @param array $response
-     */
-    private function process_rate_response($response) {
+        /**
+         * Processes the response of a rating request.
+         *
+         * @param object|null $response The decoded response, as returned by send_request().
+         * @return array [string message, int status (2 = success)]
+         */
+    private function process_rate_response(?object $response): array {
 
-        $response = json_decode($response);
+        // The response was already decoded by send_request().
+        if (!is_object($response)) {
+            $this->message = get_string('invalidapiresponse', 'local_lionai_reports');
+            return [$this->message, 0];
+        }
 
         if (isset($response->error) && $response->error) {
             $this->message = $response->error;
             return [$this->message, 0];
         } else {
-            $this->message = $response->success;
+            $this->message = $response->success ?? '';
             return [$this->message, 2];
         }
     }
 
-    /**
-     * extract_sql
-     *
-     * @param string $rawinput
-     */
-    public function extract_sql($rawinput) {
+        /**
+         * Extracts the SQL out of the raw text answered by the AI.
+         *
+         * @param string $rawinput The raw answer.
+         * @return array [string sql, int correct (2 = valid SQL), string prompt id]
+         */
+    public function extract_sql(string $rawinput): array {
         $correct = 0;
         $sql = '';
 
@@ -204,7 +286,7 @@ class lionai_reports_api {
             $correct = 2;
             $sql = $rawinput;
         } else {
-            if (preg_match('/```(sql)?(.*?)```/s', $rawinput, $matches)) {
+            if (preg_match('/' . str_repeat(chr(96), 3) . '(sql)?(.*?)' . str_repeat(chr(96), 3) . '/s', $rawinput, $matches)) {
                 $sql = trim($matches[2]);
                 if (self::is_valid_sql($sql)) {
                     $correct = 2;
@@ -222,48 +304,55 @@ class lionai_reports_api {
         return [rtrim($sql, ';'), $correct, $this->promptid];
     }
 
-    /**
-     * is_valid_sql
-     *
-     * @param string $sql
-     */
-    public function is_valid_sql($sql) {
+        /**
+         * Basic check that the text looks like a SELECT query.
+         *
+         * @param string $sql The SQL.
+         * @return bool
+         */
+    public function is_valid_sql(string $sql): bool {
         return (stripos($sql, 'SELECT') !== false && stripos($sql, 'FROM') !== false);
     }
 
-    /**
-     * send_request to API
-     *
-     * @param string $data
-     */
-    private function send_request($data) {
+        /**
+         * Sends the request to the API.
+         *
+         * @param array $data The request body.
+         * @return object|null The decoded response, or null when it could not be decoded
+         */
+    private function send_request(array $data): ?object {
         global $CFG;
-        require_once($CFG->libdir.'/filelib.php');
+        require_once($CFG->libdir . '/filelib.php');
 
         $ch = new \curl();
         $response = null;
 
-        // Determine if using new API
-        $isNewApi = !(strpos($this->url, 'LionAI') !== false);
+        // Determine if using the new API.
+        $isnewapi = !(strpos($this->url, 'LionAI') !== false);
 
-        if($isNewApi) {
+        if ($isnewapi) {
             $headers = [
-                'x-api-key: ' . $data['token'],
+                'x-api-key: ' . $this->key,
             ];
             $ch->setHeader($headers);
 
             $response = $ch->post($this->url, json_encode($data));
-            $response = json_decode($response)->body;
+            $this->rawresponse = (string) $response;
             $response = json_decode($response);
+            $response = is_object($response) && isset($response->body) ? json_decode($response->body) : null;
         } else {
             $response = $ch->post($this->url, json_encode($data));
+            $this->rawresponse = (string) $response;
             $response = json_decode($response);
         }
+
+        $info = $ch->get_info();
+        $this->httpcode = (int) ($info['http_code'] ?? 0);
 
         if ($ch->get_errno()) {
             $errormessage = $ch->error;
             $this->error = 1;
-            $this->message = "cURL Error: $errormessage";
+            $this->message = get_string('curlerror', 'local_lionai_reports', $errormessage);
         }
 
         return $response;
